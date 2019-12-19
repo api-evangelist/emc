@@ -1,0 +1,45 @@
+{
+    "name": "EMC",
+    "description": "",
+    "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/api-evangelist-site\/company\/logos\/EMC_Corporation_logo.svg.png",
+    "tags": [
+        "api service provider",
+        "have api",
+        "surveillance"
+    ],
+    "created": "2019-12-19",
+    "modified": "2019-12-19",
+    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/emc\/master\/apis.json",
+    "specificationVersion": "0.14",
+    "apis": [
+        {
+            "name": "EMC",
+            "description": null,
+            "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/api-evangelist-site\/company\/logos\/EMC_Corporation_logo.svg.png",
+            "humanURL": "http:\/\/www.emc.com",
+            "baseURL": "",
+            "tags": [],
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/emc-openapi.json"
+                }
+            ]
+        }
+    ],
+    "include": [],
+    "x-common": [
+        {
+            "type": "Github",
+            "url": "https:\/\/github.com\/emccode"
+        },
+        {
+            "type": "Twitter",
+            "url": "https:\/\/twitter.com\/EMCcorp"
+        },
+        {
+            "type": "Website",
+            "url": "http:\/\/www.emc.com"
+        }
+    ]
+}

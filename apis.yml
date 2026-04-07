@@ -1,7 +1,11 @@
 aid: emc
-url: https://raw.githubusercontent.com/api-evangelist/emc/refs/heads/main/apis.yml
+url: 
+  https://raw.githubusercontent.com/api-evangelist/emc/refs/heads/main/apis.yml
 modified: '2026-03-24'
 apis: []
 common:
   - type: Website
     url: https://www.emc.com
+description: >-
+  Dell provides technology solutions, services & support. Buy Laptops, Touch Screen
+  PCs, Desktops, Servers, Storage, Monitors, Gaming & Accessories.

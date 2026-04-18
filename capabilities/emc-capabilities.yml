@@ -1,0 +1,41 @@
+name: EMC API Capabilities
+description: Shared per-API capability definitions and workflow compositions for EMC APIs.
+capabilities:
+  - name: Object Storage Management
+    description: Manage Dell EMC ECS object storage namespaces, buckets, and users.
+    apis:
+      - emc:ecs-management-api
+    workflows:
+      - name: Provision Storage Tenant
+        description: Provision a new storage tenant with namespace and bucket.
+        steps:
+          - description: Create a storage namespace for the tenant.
+          - description: Configure replication group and storage pool.
+          - description: Create a bucket within the namespace.
+          - description: Set bucket policies and access controls.
+
+  - name: Storage Array Management
+    description: Manage Dell EMC Unity and PowerStore storage arrays.
+    apis:
+      - emc:unisphere-api
+    workflows:
+      - name: Storage Provisioning
+        description: Provision storage resources on managed arrays.
+        steps:
+          - description: Discover available storage pools and capacity.
+          - description: Create storage resources (LUNs, file systems).
+          - description: Configure host access and export policies.
+          - description: Set up performance monitoring and alerts.
+
+  - name: Data Protection
+    description: Configure data protection and replication policies.
+    apis:
+      - emc:ecs-management-api
+      - emc:unisphere-api
+    workflows:
+      - name: Configure Replication
+        description: Set up geo-distributed replication for data protection.
+        steps:
+          - description: Define replication groups across sites.
+          - description: Configure replication policies and schedules.
+          - description: Monitor replication status and health.

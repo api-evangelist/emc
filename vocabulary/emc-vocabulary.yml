@@ -1,0 +1,39 @@
+name: EMC API Vocabulary
+description: Vocabulary and taxonomy schema mapping operational and capability dimensions for EMC APIs.
+domains:
+  - name: Storage Infrastructure
+    concepts:
+      - term: Object Storage
+        definition: A storage architecture that manages data as objects with metadata and unique identifiers.
+        aliases:
+          - ECS
+          - Elastic Cloud Storage
+      - term: Block Storage
+        definition: Storage that manages data as fixed-size blocks, typically used for structured data.
+        aliases:
+          - LUN
+          - Logical Unit Number
+      - term: Storage Pool
+        definition: A logical grouping of physical storage resources for capacity management.
+  - name: Data Management
+    concepts:
+      - term: Namespace
+        definition: A logical isolation boundary for storage tenants and their data.
+      - term: Bucket
+        definition: A container for objects within a namespace in object storage.
+      - term: Replication Group
+        definition: A collection of storage nodes configured for data replication across sites.
+  - name: Storage Administration
+    concepts:
+      - term: Unisphere
+        definition: Dell EMC management interface for Unity and PowerStore storage arrays.
+      - term: Storage Provisioning
+        definition: The process of allocating and configuring storage resources for use.
+      - term: Data Protection
+        definition: Mechanisms for protecting data including replication, snapshots, and backups.
+tags:
+  - Cloud Infrastructure
+  - Data Management
+  - Data Protection
+  - Enterprise Storage
+  - Storage

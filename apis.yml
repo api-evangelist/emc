@@ -61,6 +61,10 @@ apis:
       - type: Support
         url: https://www.dell.com/support/home/en-us
 common:
+  - type: GitHubOrganization
+    url: https://github.com/emccorp
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/emc-corporation
   - type: Documentation
     url: https://www.dell.com/support/kbdoc/en-us/000020064/ecs-api-documentation
   - type: Support

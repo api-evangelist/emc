@@ -19,6 +19,7 @@ tags:
   - Data Protection
   - Enterprise Storage
   - Storage
+  - Fortune 500
 apis:
   - aid: emc:ecs-management-api
     name: EMC ECS Management REST API

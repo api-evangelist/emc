@@ -62,6 +62,10 @@ apis:
       - type: Support
         url: https://www.dell.com/support/home/en-us
 common:
+  - type: VulnerabilityDisclosure
+    url: security/emc-vulnerability-disclosure.yml
+  - type: DomainSecurity
+    url: security/emc-domain-security.yml
   - type: GitHubOrganization
     url: https://github.com/emccorp
   - type: LinkedIn

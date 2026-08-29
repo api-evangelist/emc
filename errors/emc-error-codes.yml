@@ -1,0 +1,603 @@
+generated: '2026-08-29'
+method: searched
+source: https://github.com/EMCECS/python-ecsclient/blob/master/ecsclient/common/error_codes.py
+provider: EMC
+providerId: emc
+api: EMC ECS Management REST API
+format: vendor-json
+description: 'Error catalog for the EMC ECS Management REST API, harvested verbatim from the error-code
+  registry shipped inside python-ecsclient — EMC''s own first-party Python client, published from the
+  EMCECS GitHub organization. These are the numeric codes ECS returns in the `code` field of its JSON
+  error envelope, with the titles EMC ships for them. Not RFC 9457: ECS predates problem+json and uses
+  its own envelope.'
+envelope:
+  media_type: application/json
+  shape:
+    code: integer — the ECS error code, keyed in codes[] below
+    retryable: boolean — whether the caller may retry the same request
+    description: string — short description of the failure
+    details: string — longer detail, when ECS supplies one
+  source: https://github.com/EMCECS/python-ecsclient/blob/master/ecsclient/common/exceptions.py
+  note: ECSClientException.from_response() parses exactly these four keys off the response body and falls
+    back to the code registry when `details` and `description` are both empty. That fallback is why the
+    registry exists in the client at all — ECS does not always return prose.
+http_status_mapping:
+- status: 401
+  meaning: Invalid credentials or expired X-SDS-AUTH-TOKEN
+  ecs_codes:
+  - '4000'
+  note: The client treats 401/403/415 on a token-validation call as "token stale, fetch a new one".
+- status: 403
+  meaning: Operation forbidden for these credentials, or license check failure
+  ecs_codes:
+  - '3000'
+  - '3001'
+- status: 415
+  meaning: Unsupported or missing media type
+  ecs_codes:
+  - '1003'
+- status: 500
+  meaning: Server-side failure; the client raises rather than retrying
+  ecs_codes:
+  - '7000'
+  - '7001'
+code_count: 176
+families:
+- range: 127–1049
+  name: request-validation
+  description: Malformed, missing, out-of-range or conflicting request parameters, bodies and headers;
+    resource-state conflicts such as already-exists and marked-for-deletion.
+- range: 2000–2001
+  name: entity-resolution
+  description: The entity named in the request URL cannot be found or is inactive and marked for deletion.
+- range: 3000–3001
+  name: authorization
+  description: The operation is forbidden for the supplied credentials, or blocked by a license check.
+- range: 4000+
+  name: authentication
+  description: Invalid credentials or invalid/expired authentication token.
+- range: 5001+
+  name: controller
+  description: Failures raised inside the ECS controller during file and storage-device operations.
+- range: 6000+
+  name: service-availability
+  description: The service is unavailable or an asynchronous operation is still initializing; these are
+    the retryable class.
+- range: 7000+
+  name: api-service
+  description: Failures inside the ECS API service itself, including serialization errors.
+codes:
+- code: '127'
+  title: Exceeding assignment limit
+  family: request-validation
+- code: '1002'
+  title: URI parameter is invalid
+  family: request-validation
+- code: '1003'
+  title: Unsupported or missing media type
+  family: request-validation
+- code: '1004'
+  title: Request parameter cannot be found
+  family: request-validation
+- code: '1005'
+  title: Required parameter is missing or empty
+  family: request-validation
+- code: '1006'
+  title: Request parameter is inactive and marked for deletion
+  family: request-validation
+- code: '1007'
+  title: Method not supported
+  family: request-validation
+- code: '1008'
+  title: Parameter was provided but invalid
+  family: request-validation
+- code: '1009'
+  title: Bad headers
+  family: request-validation
+- code: '1010'
+  title: Resource marked For deletion
+  family: request-validation
+- code: '1011'
+  title: Unable to use provided VPool
+  family: request-validation
+- code: '1012'
+  title: Unable to make requested change
+  family: request-validation
+- code: '1013'
+  title: Bad request body
+  family: request-validation
+- code: '1014'
+  title: Parameter value not within range
+  family: request-validation
+- code: '1015'
+  title: Resource already exists
+  family: request-validation
+- code: '1016'
+  title: Invalid zone specified
+  family: request-validation
+- code: '1017'
+  title: Unable to register system
+  family: request-validation
+- code: '1018'
+  title: Not registered
+  family: request-validation
+- code: '1019'
+  title: Resource not found
+  family: request-validation
+- code: '1020'
+  title: Resource is being referenced
+  family: request-validation
+- code: '1021'
+  title: Unable to find a suitable placement to handle the request
+  family: request-validation
+- code: '1022'
+  title: Already registered
+  family: request-validation
+- code: '1023'
+  title: Version is not supported
+  family: request-validation
+- code: '1025'
+  title: Unable to delete resource
+  family: request-validation
+- code: '1026'
+  title: Insufficient permissions for user
+  family: request-validation
+- code: '1028'
+  title: Unsupported role assignment
+  family: request-validation
+- code: '1029'
+  title: Time bucket parameter invalid
+  family: request-validation
+- code: '1030'
+  title: Virtual pool change would be disruptive
+  family: request-validation
+- code: '1031'
+  title: Exceeding limit
+  family: request-validation
+- code: '1032'
+  title: An error occurred during quota validation for provisioning
+  family: request-validation
+- code: '1033'
+  title: Unknown RecoverPoint configuration specified
+  family: request-validation
+- code: '1034'
+  title: An error occurred while finding a suitable placement to handle the request
+  family: request-validation
+- code: '1035'
+  title: Attachment(s) size is more than maximum allowed
+  family: request-validation
+- code: '1036'
+  title: Invalid volume type
+  family: request-validation
+- code: '1037'
+  title: Invalid protection virtual pool configuration.
+  family: request-validation
+- code: '1038'
+  title: Invalid file share name specified
+  family: request-validation
+- code: '1039'
+  title: Invalid Network Configuration
+  family: request-validation
+- code: '1040'
+  title: Invalid virtual pool
+  family: request-validation
+- code: '1041'
+  title: There is no download in progress
+  family: request-validation
+- code: '1042'
+  title: Operation not supported on ingested volumes
+  family: request-validation
+- code: '1043'
+  title: The high availability for the continuous copies virtual pool is invalid
+  family: request-validation
+- code: '1044'
+  title: Invalid continuous copies vpool
+  family: request-validation
+- code: '1045'
+  title: Invalid action
+  family: request-validation
+- code: '1046'
+  title: Virtual pool in use as continuous copies virtual pool
+  family: request-validation
+- code: '1047'
+  title: API not been initialized
+  family: request-validation
+- code: '1048'
+  title: Unable to find mirror virtual pool
+  family: request-validation
+- code: '1049'
+  title: Parameter was not provided
+  family: request-validation
+- code: '2000'
+  title: Unable to find entity in request URL
+  family: entity-resolution
+- code: '2001'
+  title: URI parameter is inactive and marked for deletion
+  family: entity-resolution
+- code: '3000'
+  title: This operation is forbidden for this resource using the specified credentials
+  family: authorization
+- code: '3001'
+  title: This operation is forbidden due to license check failure.
+  family: authorization
+- code: '4000'
+  title: Invalid credentials or authentication token provided to access to this resource
+  family: authentication
+- code: '5001'
+  title: An error occurred in the controller during a file operation
+  family: controller
+- code: '5002'
+  title: An error occurred in the controller during a file storage device connection operation
+  family: controller
+- code: '6000'
+  title: Unable to connect to the service. The service is unavailable, try again later
+  family: service-availability
+- code: '6001'
+  title: Download initializing
+  family: service-availability
+- code: '7000'
+  title: An error occurred in the API Service
+  family: api-service
+- code: '7001'
+  title: An error occurred when getting the Jaxb context
+  family: api-service
+- code: '7002'
+  title: An error occurred in the Audit Log Service
+  family: api-service
+- code: '7003'
+  title: An error occurred in the Metering service
+  family: api-service
+- code: '7004'
+  title: Event retrieval error
+  family: api-service
+- code: '7005'
+  title: An occurred during the Ingestion Request
+  family: api-service
+- code: '7006'
+  title: An error occurred during deletion of the RP volume
+  family: api-service
+- code: '7007'
+  title: An error occurred during RP volume creation
+  family: api-service
+- code: '7008'
+  title: Error occurred during downloading image
+  family: api-service
+- code: '8000'
+  title: An error occurred in the database
+  family: platform
+- code: '8001'
+  title: Unable to find the object with the given id
+  family: platform
+- code: '8003'
+  title: Failed to write to database
+  family: platform
+- code: '8004'
+  title: Failed to read from database
+  family: platform
+- code: '8005'
+  title: Failed to delete from database
+  family: platform
+- code: '8006'
+  title: Failed to query from database
+  family: platform
+- code: '8007'
+  title: Invalid annotation
+  family: platform
+- code: '8500'
+  title: Unable to connect to the database service
+  family: platform
+- code: '8501'
+  title: Dummy failure for testing
+  family: platform
+- code: '9000'
+  title: Unable to queue the job
+  family: other
+- code: '9001'
+  title: An error occurred in the coordinator
+  family: other
+- code: '9002'
+  title: Error occurred while decoding from coordinator
+  family: other
+- code: '9003'
+  title: Invalid repository information
+  family: other
+- code: '9004'
+  title: Not connectable endpoint
+  family: other
+- code: '9500'
+  title: Unable to queue the job
+  family: other
+- code: '9501'
+  title: The coordinator was unable to locate the service
+  family: other
+- code: '10000'
+  title: A security error has occurred.
+  family: other
+- code: '10001'
+  title: An error occurred while encoding/decoding of tokens
+  family: other
+- code: '10004'
+  title: Required parameter is missing or empty
+  family: other
+- code: '10005'
+  title: An error occurred while verifying the service signature
+  family: other
+- code: '10500'
+  title: A service which is required to complete the security request is unavailable
+  family: other
+- code: '10501'
+  title: ViPR keystore operation is unavailable
+  family: other
+- code: '11000'
+  title: Unable to schedule job
+  family: other
+- code: '11001'
+  title: Unable to locate device controller
+  family: other
+- code: '11002'
+  title: Unable to scan job
+  family: other
+- code: '11003'
+  title: Unable to monitor job
+  family: other
+- code: '12002'
+  title: An error occurred while metering storage devices
+  family: other
+- code: '12003'
+  title: An error occurred while monitoring storage devices
+  family: other
+- code: '12005'
+  title: URI parameter is invalid
+  family: other
+- code: '12006'
+  title: Controller Entity is marked for deletion
+  family: other
+- code: '12007'
+  title: An error occurred when updating the EndPoints
+  family: other
+- code: '12008'
+  title: Attempt to use an unknown transport zone
+  family: other
+- code: '12009'
+  title: Unable to find the controller entity
+  family: other
+- code: '12011'
+  title: An error occurred in getting the Block Object's Native ID
+  family: other
+- code: '14000'
+  title: An error occurred in a workflow step
+  family: other
+- code: '14002'
+  title: The workflow step has been cancelled
+  family: other
+- code: '15000'
+  title: Unable to dispatch to a controller
+  family: other
+- code: '30000'
+  title: Cluster state is not stable
+  family: other
+- code: '30001'
+  title: Error occurred while releasing lock
+  family: other
+- code: '30002'
+  title: Object is null or empty
+  family: other
+- code: '30003'
+  title: Error occurred while writing
+  family: other
+- code: '30004'
+  title: Error occurred while reading
+  family: other
+- code: '30005'
+  title: Error occurred while creating object
+  family: other
+- code: '30006'
+  title: Error occurred while retrieving object
+  family: other
+- code: '30007'
+  title: Error occurred while setting object
+  family: other
+- code: '30008'
+  title: Error occurred while updating object
+  family: other
+- code: '30009'
+  title: Self test wait to complete
+  family: other
+- code: '30010'
+  title: Self test error occurred
+  family: other
+- code: '30011'
+  title: Error occurred while executing upload install
+  family: other
+- code: '30012'
+  title: Error occurred while waking up other nodes
+  family: other
+- code: '30013'
+  title: ConnectEMC service not configured
+  family: other
+- code: '30014'
+  title: Error occurred when initializing SSL content for remote repository
+  family: other
+- code: '30015'
+  title: No node available to execute operations
+  family: other
+- code: '30016'
+  title: Object is invalid
+  family: other
+- code: '30018'
+  title: Error occurred while releasing lock not by the lock owner
+  family: other
+- code: '30020'
+  title: Invalid software version
+  family: other
+- code: '30021'
+  title: Local repository error occurred
+  family: other
+- code: '30022'
+  title: Remote repository error occurred
+  family: other
+- code: '30023'
+  title: Error occurred while calling internal api
+  family: other
+- code: '30024'
+  title: Internal exception occurred
+  family: other
+- code: '30025'
+  title: Error occurred while calling coordinator client
+  family: other
+- code: '30026'
+  title: Service is busy
+  family: other
+- code: '30027'
+  title: Error occurred while powering off other nodes
+  family: other
+- code: '30028'
+  title: Failed to download a new image
+  family: other
+- code: '30029'
+  title: Error occurred while restarting service
+  family: other
+- code: '30030'
+  title: Failed connecting to controller
+  family: other
+- code: '40000'
+  title: Datastore creation failed
+  family: other
+- code: '40001'
+  title: Datastore deletion failed
+  family: other
+- code: '40002'
+  title: Project is invalid
+  family: other
+- code: '40003'
+  title: Project not found for namespace
+  family: other
+- code: '40004'
+  title: ObjectStore is invalid
+  family: other
+- code: '40005'
+  title: ObjectStore not found for namespace
+  family: other
+- code: '40006'
+  title: ObjectStore being used is not compatible with the request
+  family: other
+- code: '40007'
+  title: ObjectStore does not have associated datastore
+  family: other
+- code: '40008'
+  title: Bucket already exists
+  family: other
+- code: '40009'
+  title: Invalid bucket name
+  family: other
+- code: '40010'
+  title: Bucket Owner not valid
+  family: other
+- code: '40011'
+  title: Invalid object virtual pool type
+  family: other
+- code: '40012'
+  title: Dataservice Invalid Varray
+  family: other
+- code: '40013'
+  title: No Data Store
+  family: other
+- code: '40014'
+  title: System being initialized
+  family: other
+- code: '40015'
+  title: Obj Vpool Lists Not Mutually Exclusive
+  family: other
+- code: '40016'
+  title: Internal error while listing data nodes
+  family: other
+- code: '50000'
+  title: Cannot connect the remote vdc
+  family: other
+- code: '50001'
+  title: Internal error occurred during vdc management operations
+  family: other
+- code: '50002'
+  title: Cannot acquire global lock for vdc operations
+  family: other
+- code: '50003'
+  title: The federation has more than two different versions
+  family: other
+- code: '50004'
+  title: The federation is unstable
+  family: other
+- code: '51001'
+  title: Invalid vdc status occurred when connecting vdc
+  family: other
+- code: '51002'
+  title: Precheck of adding vdc failed
+  family: other
+- code: '51003'
+  title: Failed to generate the new vdc config info
+  family: other
+- code: '51004'
+  title: Sync new cert failed
+  family: other
+- code: '51005'
+  title: Generate cert chain failed
+  family: other
+- code: '51006'
+  title: Sync vdc configuration of connecting vdc failed
+  family: other
+- code: '51007'
+  title: Postcheck of connecting vdc failed
+  family: other
+- code: '51008'
+  title: Update vdc status failed in connecting vdc
+  family: other
+- code: '52001'
+  title: Precheck of removing vdc failed
+  family: other
+- code: '52002'
+  title: Sync vdc configuration of removing vdc failed
+  family: other
+- code: '52003'
+  title: Postcheck of removing vdc failed
+  family: other
+- code: '52004'
+  title: Invalid vdc status occurred when removing vdc
+  family: other
+- code: '53001'
+  title: Cannot update all the vdc
+  family: other
+- code: '53002'
+  title: Invalid vdc status occurred when updating vdc
+  family: other
+- code: '53003'
+  title: Precheck of updating vdc failed
+  family: other
+- code: '54001'
+  title: The current VDC is not in correct status to perform disconnecting operation
+  family: other
+- code: '54002'
+  title: The VDC to be disconnected is still reachable
+  family: other
+- code: '54003'
+  title: Some vdc is under disconnecting or connected failed status
+  family: other
+- code: '54004'
+  title: Failed to disconnect the VDC
+  family: other
+- code: '55001'
+  title: Failed to reconnect the VDC
+  family: other
+- code: '55002'
+  title: The VDC is not in correct status to finish reconnect
+  family: other
+- code: '55003'
+  title: Back end node repair failed when perform reconnect opertion
+  family: other
+- code: '55004'
+  title: There is at least one vdc is unreachable with operator
+  family: other
+gaps:
+- ECS does not publish RFC 9457 application/problem+json. Agents must parse the vendor envelope.
+- The registry ships remediation for none of the codes — titles only. No `action` field is asserted here
+  because EMC publishes none, and inventing remediation would be fabrication.
+- The `retryable` boolean is the only machine-readable retry signal; it is per-response, not per-code,
+  so a static code-to-retry mapping cannot be derived from this registry.

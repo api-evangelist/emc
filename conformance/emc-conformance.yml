@@ -1,0 +1,166 @@
+generated: '2026-08-29'
+method: searched
+source: >-
+  Dell Technologies Security and Trust Center
+  (https://www.dell.com/en-us/dt/about-us/security-and-trust-center/index.htm, HTTP 200,
+  fetched 2026-08-29) for the compliance programs; the EMC-owned GitHub organization
+  github.com/EMCECS and EMC's first-party client code for the protocol conformance claims.
+provider: EMC
+providerId: emc
+description: >-
+  Standards and compliance conformance for EMC (Dell EMC). The interesting half is the
+  domain-standard row: ECS is not a bespoke object API, it is a multi-protocol
+  implementation of the object-storage market's existing standards, which is precisely
+  the property that decides whether a buyer needs a bespoke connector or none at all.
+domain_standards:
+  - id: amazon-s3-api
+    name: Amazon S3 REST API
+    conforms: true
+    market: object storage
+    evidence:
+      - >-
+        EMC publishes github.com/EMCECS/ecs-object-client-java (Maven com.emc.ecs:object-client)
+        and github.com/EMCECS/ecs-object-client-dotnet, the latter described by EMC as a
+        ".NET extension library that adds ECS-specific functionality to the AWS SDK" —
+        i.e. the AWS S3 SDK is the base client, not a separate one.
+      - >-
+        EMC maintains a fork of AWS's own Python SDK at github.com/EMCECS/boto3, and ships
+        github.com/EMCECS/s3curl and github.com/EMCECS/cosbench for S3-protocol testing.
+    significance: >-
+      An S3-speaking application integrates with ECS by changing an endpoint. This is the
+      single largest interoperability fact about the platform and it is a standards
+      conformance, not a feature.
+  - id: openstack-swift-api
+    name: OpenStack Swift Object API
+    conforms: true
+    market: object storage
+    evidence:
+      - Declared as a supported protocol in this provider's apis.yml Features block.
+      - >-
+        EMC maintains the emc-openstack GitHub organization (source of the storops PyPI
+        package) for its OpenStack integrations.
+  - id: emc-atmos-api
+    name: EMC Atmos Object API
+    conforms: true
+    market: object storage
+    evidence:
+      - >-
+        github.com/EMCECS/atmos-client-java, described by EMC as "a Java wrapper around
+        the Atmos protocol for use with Atmos and ECS object stores"; published to Maven
+        as com.emc.ecs:atmos-client 3.2.1.
+    note: EMC's own legacy object protocol, retained by ECS for backward compatibility.
+  - id: emc-cas-centera
+    name: EMC CAS (Content Addressable Storage, Centera lineage)
+    conforms: true
+    market: compliance archiving
+    evidence:
+      - >-
+        A first-class resource family in the ECS Management API — object/user-cas/* covers
+        CAS applications, per-namespace metadata, PEA profile files, secrets and cluster
+        binding. See data-model/emc-data-model.yml.
+    significance: >-
+      CAS is the write-once archival protocol regulated industries built retention on.
+      Its presence is why ECS appears in records-retention estates at all.
+  - id: nfsv3
+    name: NFS version 3
+    conforms: true
+    market: file access
+    evidence:
+      - github.com/EMCECS/nfs-client-java, published to Maven as com.emc.ecs:nfs-client 1.1.0.
+  - id: hdfs
+    name: Hadoop HDFS interface
+    conforms: true
+    market: analytics storage
+    evidence:
+      - Declared as a supported protocol in this provider's apis.yml Features block.
+      - github.com/EMCECS/spark-ecs-connector and spark-ecs-s3 published to Maven under com.emc.ecs.
+standards:
+  - id: snmp
+    name: SNMP
+    conforms: true
+    evidence:
+      - >-
+        ECS Management API exposes SNMP agent and trap-target configuration at
+        vdc/snmp/config and vdc/snmp/config/target/{id} (GET/POST/PUT/DELETE).
+  - id: syslog
+    name: Syslog (remote logging)
+    conforms: true
+    evidence:
+      - ECS Management API exposes vdc/syslog/config and vdc/syslog/config/{id}.
+  - id: rfc9116
+    name: RFC 9116 security.txt
+    conforms: partial
+    evidence:
+      - >-
+        https://www.dell.com/.well-known/security.txt returns HTTP 200 with a valid RFC
+        9116 document carrying Contact, Policy, Encryption, Hiring and Canonical fields —
+        but its Expires field reads 2026-04-17T04:00:00.000Z, so the document is expired
+        as of this probe on 2026-08-29. RFC 9116 requires the Expires date be in the future.
+  - id: rfc9457
+    name: RFC 9457 Problem Details for HTTP APIs
+    conforms: false
+    evidence:
+      - >-
+        ECS returns a vendor JSON envelope {code, retryable, description, details}, not
+        application/problem+json. See errors/emc-error-codes.yml.
+  - id: oauth2
+    name: OAuth 2.0
+    conforms: false
+    evidence:
+      - >-
+        No OAuth flow is declared by either EMC management API, and no
+        /.well-known/oauth-authorization-server document is served on any probed host.
+  - id: oidc
+    name: OpenID Connect
+    conforms: false
+    evidence:
+      - No /.well-known/openid-configuration served on www.dell.com or developer.dell.com (302 to marketing).
+  - id: rfc9727
+    name: RFC 9727 api-catalog
+    conforms: false
+    evidence:
+      - >-
+        https://www.dell.com/.well-known/api-catalog 302s and resolves to the Dell USA
+        homepage HTML — a soft 404, not a catalog.
+compliance_programs:
+  source: https://www.dell.com/en-us/dt/about-us/security-and-trust-center/index.htm
+  note: >-
+    These are Dell Technologies corporate certifications covering the organization that
+    now builds and operates the EMC storage portfolio. They are not per-API attestations,
+    and Dell states that the SOC reports themselves are obtained through a sales or
+    service representative rather than published.
+  certifications:
+    - name: ISO 27001
+      detail: Information Security Management System — global multi-site certification
+    - name: SOC 1 Type 2
+      detail: Service Organization Control report, independently assessed
+    - name: SOC 2 Type 2
+      detail: Service Organization Control report, independently assessed
+    - name: PCI DSS
+      detail: Level 2 Merchant certification
+    - name: Common Criteria (CCC)
+      detail: EAL2+ with ALC_FLR.2 across multiple products
+    - name: O-TTPS / ISO-IEC 20243:2023
+      detail: Open Trusted Technology Provider Standard — supply chain integrity
+    - name: TISAX
+      detail: Trusted Information Security Assessment Exchange (automotive sector)
+    - name: IRAP
+      detail: Information Security Registered Assessors Program (Australian Government)
+    - name: Cyber Essentials
+      detail: UK Government-backed framework
+    - name: Esquema Nacional de Seguridad (ENS)
+      detail: Spain national cybersecurity framework, Basic certification
+    - name: NHS DSPT
+      detail: NHS Data Security and Protection Toolkit
+    - name: Swift CSP
+      detail: Customer Security Programme attestation
+    - name: JOSCAR
+      detail: Aerospace, defence and security sector accreditation
+    - name: CyberGRX
+      detail: Third-party cyber risk assessment
+    - name: CyberVadis
+      detail: Corporate security environment assessment
+    - name: KY3P
+      detail: Third-party risk assessment
+    - name: EU Data Act
+      detail: Compliance framework

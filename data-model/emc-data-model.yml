@@ -1,0 +1,236 @@
+generated: '2026-08-29'
+method: derived
+source: >-
+  Derived from the resource modules and REST paths in https://github.com/EMCECS/python-ecsclient
+  (EMC's first-party ECS Management API client), read on 2026-08-29. No OpenAPI was
+  reachable to derive $ref links from; entities and relationships below come from the
+  client's own module tree and URL structure.
+provider: EMC
+providerId: emc
+api: EMC ECS Management REST API
+description: >-
+  Entity graph for the EMC ECS Management REST API. ECS is a geo-distributed object store,
+  and its management model reflects that: physical capacity rolls up through nodes and
+  storage pools into a Virtual Data Center, VDCs federate into replication groups, and
+  tenancy is layered on top through namespaces, buckets and object users. The graph below
+  names only entities that appear as real resources in EMC's own client.
+domains:
+  - name: Provisioning
+    entities: [VirtualDataCenter, StoragePool, Node, DataStore, VirtualArray, VirtualPool, Bucket, BaseUrl, VdcKeystore]
+  - name: Multi-tenancy
+    entities: [Namespace, Tenant]
+  - name: User Management
+    entities: [ObjectUser, ManagementUser, SecretKey, AuthenticationProvider, PasswordGroup]
+  - name: Geo-replication
+    entities: [ReplicationGroup, TemporaryFailedZone]
+  - name: Monitoring
+    entities: [Capacity, Dashboard, Event, Alert]
+  - name: Metering
+    entities: [Billing]
+  - name: Configuration
+    entities: [Certificate, ConfigurationProperties, License, Feature, Syslog, Snmp]
+  - name: CAS
+    entities: [CasUser, CasProfile]
+entities:
+  - name: VirtualDataCenter
+    aka: VDC
+    path: object/vdcs/vdc
+    description: A single ECS site — the top-level federation unit. VDCs are joined into replication groups.
+    operations:
+      - 'GET object/vdcs/vdc/list'
+      - 'PUT object/vdcs/vdc/{id}'
+      - 'POST object/vdcs/vdc/{id}/deactivate'
+      - 'GET object/vdcs/vdc/local/secretkey'
+  - name: StoragePool
+    aka: Virtual Array
+    path: vdc/data-services/varrays
+    description: A logical grouping of ECS nodes providing capacity within a VDC.
+    operations:
+      - 'GET vdc/data-services/varrays'
+      - 'GET vdc/data-services/varrays/{id}'
+      - 'POST vdc/data-services/varrays'
+      - 'PUT vdc/data-services/varrays/{id}'
+      - 'DELETE vdc/data-services/varrays/{id}'
+  - name: Node
+    path: vdc/nodes
+    description: A physical or virtual ECS commodity node contributing capacity to a storage pool.
+  - name: DataStore
+    path: vdc/data-stores/commodity
+    description: A commodity data store bound to a virtual array; creation is asynchronous and polled via a task resource.
+    operations:
+      - 'GET vdc/data-stores/commodity/{id}'
+      - 'GET vdc/data-stores/commodity/search/varray/{varrayId}'
+      - 'POST vdc/data-stores/commodity'
+      - 'POST vdc/data-stores/{id}/deactivate'
+      - 'GET vdc/data-stores/{id}/tasks/{taskId}'
+  - name: VirtualPool
+    aka: Replication Group / data-service vpool
+    path: vdc/data-service/vpools
+    description: The replication policy object — which virtual arrays a namespace's data is written across.
+    operations:
+      - 'GET vdc/data-service/vpools'
+      - 'GET vdc/data-service/vpools/{id}'
+      - 'POST vdc/data-service/vpools'
+      - 'PUT vdc/data-service/vpools/{id}'
+      - 'PUT vdc/data-service/vpools/{id}/addvarrays'
+      - 'PUT vdc/data-service/vpools/{id}/removevarrays'
+      - 'POST vdc/data-service/vpools/{id}/deactivate'
+  - name: Namespace
+    path: object/namespaces/namespace
+    description: The tenancy isolation boundary. Every bucket and object user belongs to exactly one namespace.
+    operations:
+      - 'POST object/namespaces/namespace'
+      - 'PUT object/namespaces/namespace/{id}'
+      - 'POST object/namespaces/namespace/{id}/deactivate'
+  - name: Tenant
+    path: object/tenants/tenant
+    description: Tenant record layered over namespaces.
+    operations:
+      - 'POST object/tenants/tenant'
+      - 'PUT object/tenants/tenant/{id}'
+      - 'POST object/tenants/tenant/{id}/delete'
+  - name: Bucket
+    path: object/bucket
+    description: The object container inside a namespace, addressable over S3, Swift, Atmos and CAS.
+    operations:
+      - 'GET object/bucket'
+      - 'POST object/bucket'
+      - 'POST object/bucket/{id}/owner'
+      - 'POST object/bucket/{id}/isstaleallowed'
+      - 'PUT object/bucket/{id}/retention'
+      - 'GET object/bucket/acl/groups'
+      - 'GET object/bucket/acl/permissions'
+      - 'GET object/bucket/searchmetadata'
+  - name: ObjectUser
+    path: object/users
+    description: A data-plane identity that authenticates to the S3/Swift/Atmos object endpoints.
+    operations:
+      - 'POST object/users'
+      - 'POST object/users/deactivate'
+  - name: SecretKey
+    path: object/user-secret-keys
+    description: The S3-style access secret issued to an object user; two may be active for rotation.
+  - name: ManagementUser
+    path: object/users (management scope)
+    description: A control-plane identity that authenticates to the ECS Management API itself.
+  - name: AuthenticationProvider
+    path: vdc/admin/authproviders
+    description: External identity source (AD/LDAP) for management and object users.
+  - name: CasUser
+    path: object/user-cas
+    description: Content Addressable Storage (Centera-lineage) identity, with a PEA profile file and per-namespace application bindings.
+    operations:
+      - 'GET object/user-cas/applications/{namespace}'
+      - 'GET object/user-cas/metadata/{namespace}/{uid}'
+      - 'GET object/user-cas/secret/{namespace}/{uid}/pea'
+      - 'POST object/user-cas/secret/{uid}'
+      - 'POST object/user-cas/secret/{uid}/deactivate'
+      - 'POST object/user-cas/bucket/{namespace}/{uid}'
+      - 'PUT object/user-cas/cluster/{id}'
+  - name: BaseUrl
+    path: object/baseurl
+    description: The DNS base URL mapping that lets S3 clients address buckets by virtual host style.
+  - name: License
+    path: license
+    description: The ECS licence record.
+    operations:
+      - 'GET license'
+      - 'POST license.json'
+  - name: Certificate
+    path: object-cert/keystore
+    description: The management endpoint's TLS keystore.
+    operations:
+      - 'GET object-cert/keystore'
+      - 'PUT object-cert/keystore'
+      - 'GET vdc/keystore'
+      - 'PUT vdc/keystore'
+  - name: Billing
+    path: object/billing
+    description: Metering records — namespace and bucket usage sampled for chargeback.
+  - name: Alert
+    path: vdc/alerts
+    description: Active system alerts.
+  - name: Event
+    path: vdc/events
+    description: Audit event stream, queryable by time bucket.
+  - name: Syslog
+    path: vdc/syslog/config
+    description: Remote syslog destinations.
+    operations:
+      - 'GET vdc/syslog/config'
+      - 'GET vdc/syslog/config/{id}'
+      - 'POST vdc/syslog/config'
+      - 'PUT vdc/syslog/config/{id}'
+      - 'DELETE vdc/syslog/config/{id}'
+  - name: Snmp
+    path: vdc/snmp/config
+    description: SNMP agent and trap-target configuration.
+    operations:
+      - 'GET vdc/snmp/config'
+      - 'PUT vdc/snmp/config'
+      - 'GET vdc/snmp/config/target/{id}'
+      - 'POST vdc/snmp/config/target'
+      - 'PUT vdc/snmp/config/target/{id}'
+      - 'DELETE vdc/snmp/config/target/{id}'
+relationships:
+  - from: VirtualDataCenter
+    to: StoragePool
+    type: has_many
+    via: VDC scope
+  - from: StoragePool
+    to: Node
+    type: has_many
+    via: node membership
+  - from: StoragePool
+    to: DataStore
+    type: has_many
+    via: varray id (search/varray/{varrayId})
+  - from: VirtualPool
+    to: StoragePool
+    type: has_many
+    via: addvarrays / removevarrays
+  - from: VirtualPool
+    to: VirtualDataCenter
+    type: has_many
+    via: replication across VDCs
+  - from: Namespace
+    to: VirtualPool
+    type: has_one
+    via: default replication group on the namespace
+  - from: Namespace
+    to: Bucket
+    type: has_many
+    via: namespace query parameter on object/bucket
+  - from: Namespace
+    to: ObjectUser
+    type: has_many
+    via: namespace binding on the user
+  - from: Tenant
+    to: Namespace
+    type: has_many
+    via: tenancy layering
+  - from: Bucket
+    to: ObjectUser
+    type: belongs_to
+    via: bucket owner (POST object/bucket/{id}/owner)
+  - from: ObjectUser
+    to: SecretKey
+    type: has_many
+    via: user secret keys (two active for rotation)
+  - from: CasUser
+    to: Namespace
+    type: belongs_to
+    via: namespace path segment on every CAS resource
+  - from: CasUser
+    to: Bucket
+    type: has_one
+    via: POST object/user-cas/bucket/{namespace}/{uid}
+identifier_conventions:
+  note: >-
+    ECS does not use prefixed opaque ids the way SaaS APIs do. Namespaces, buckets, object
+    users and VDCs are addressed by their human-assigned name in the URL path; virtual
+    pools, virtual arrays and data stores use URN-style ids. No id-prefix registry is
+    published.
+gaps:
+  - No OpenAPI was reachable, so field-level schemas and required/optional flags are not captured.
+  - Cardinality is inferred from URL structure and the client's module tree, not from a declared schema.

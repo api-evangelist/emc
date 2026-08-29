@@ -1,0 +1,176 @@
+generated: '2026-08-29'
+method: derived
+source: >-
+  Derived from the operation surface, headers and error handling shipped in EMC's own
+  first-party clients — https://github.com/EMCECS/python-ecsclient and
+  https://github.com/dell/PyU4V — read on 2026-08-29. No published OpenAPI was
+  reachable; developer.dell.com serves its specs from an authenticated portal API.
+provider: EMC
+providerId: emc
+description: >-
+  Cross-cutting runtime semantics for the EMC management APIs: how a caller authenticates,
+  pages, versions, reads errors, and — critically for an agent — whether a write can be
+  taken back. Every statement below is grounded in an EMC-published client; where EMC
+  publishes nothing, the field says so rather than filling in a plausible default.
+auth:
+  style: session-token
+  summary: >-
+    HTTP Basic login exchanged for a session token replayed in a vendor header
+    (X-SDS-AUTH-TOKEN on ECS; Authorization Basic or Bearer on Unisphere).
+  detail: authentication/emc-authentication.yml
+versioning:
+  style: major API version namespaced in the client, not in the URL path
+  ecs:
+    versions: [v2, v3, v4]
+    note: >-
+      EMC's Python client selects a version at construction time and swaps the module tree
+      behind the same resource paths. The wire paths (object/…, vdc/…, user/…) are not
+      version-prefixed, so the negotiated version is a client-side concern rather than a
+      URL one. An agent cannot tell from a URL which API version an ECS array will apply.
+  unisphere:
+    version: '104'
+    release: 10.4.0
+    note: >-
+      Unisphere pins an explicit numeric API version, overridable per connection
+      (`u4v_version`). This is the stronger of the two versioning stories.
+  breaking_change_signal: none published
+pagination:
+  style: marker-and-limit
+  parameters:
+    - name: marker
+      in: query
+      description: Opaque cursor; the caller passes the last-seen marker to continue.
+    - name: limit
+      in: query
+      description: Maximum records to return in the page.
+  observed_on:
+    - GET object/bucket?namespace={namespace}&marker={marker}&limit={limit}
+  response_fields: not published
+  note: >-
+    Marker/limit is confirmed on the bucket listing in EMC's own client. Whether the
+    response carries a next-marker field, and what the default and maximum limit are, is
+    not published anywhere reachable — so an agent must discover the end of a listing by
+    receiving a short page.
+error_envelope:
+  media_type: application/json
+  format: vendor-json
+  fields: [code, retryable, description, details]
+  catalog: errors/emc-error-codes.yml
+  rfc9457: false
+  note: >-
+    176 numeric codes are published inside EMC's client. `retryable` is the only
+    machine-readable retry hint and it is per-response.
+rate_limit_signaling:
+  published: false
+  headers: none published
+  status_on_exhaustion: not published
+  detail: rate-limits/emc-rate-limits.yml
+  note: >-
+    These are customer-installed appliance APIs. EMC publishes no rate limits and the
+    APIs return no RateLimit-* or Retry-After headers in any first-party client's
+    handling. Throughput is bounded by the customer's own hardware.
+request_id_tracing:
+  published: false
+  note: >-
+    No correlation-id or request-id header is set or read by either first-party client.
+    An agent has no provider-issued handle to quote in a support case.
+idempotency:
+  supported: false
+  header: null
+  note: >-
+    No idempotency key, no request-deduplication header, and no retry-safe POST semantics
+    are documented or implemented in either first-party client. POST creates (bucket,
+    namespace, tenant, object user, data store, vpool) are not protected against a
+    double-fire. No Idempotency pointer is emitted in apis.yml, because emitting one
+    would assert a capability EMC does not ship.
+dry_run_mode:
+  supported: false
+  note: No preview, validate-only or dry-run parameter is exposed on any write operation.
+reversibility:
+  grade: documented
+  summary: >-
+    ECS has a real and consistent reversal idiom — most destructive management operations
+    are expressed as a `deactivate` sub-resource rather than an HTTP DELETE, which is a
+    soft-delete/decommission rather than an immediate purge. What EMC does NOT publish is
+    the window: nothing reachable states how long a deactivated namespace, tenant, VDC,
+    virtual pool, data store or object user remains recoverable, or by what operation it
+    is reactivated. Grade is `documented`, not `verified`, for exactly that reason.
+  write_surfaces:
+    - surface: Namespace
+      create: POST object/namespaces/namespace
+      update: PUT object/namespaces/namespace/{id}
+      reversal_operation: POST object/namespaces/namespace/{id}/deactivate
+      reversal_kind: deactivate (soft delete)
+      window: not published
+      reactivation_operation: not published
+    - surface: Tenant
+      create: POST object/tenants/tenant
+      update: PUT object/tenants/tenant/{id}
+      reversal_operation: POST object/tenants/tenant/{id}/delete
+      reversal_kind: delete sub-resource (not an HTTP DELETE)
+      window: not published
+      reactivation_operation: not published
+    - surface: Virtual Data Center (VDC)
+      update: PUT object/vdcs/vdc/{id}
+      reversal_operation: POST object/vdcs/vdc/{id}/deactivate
+      reversal_kind: deactivate (soft delete)
+      window: not published
+      reactivation_operation: not published
+    - surface: Data Service Virtual Pool
+      create: POST vdc/data-service/vpools
+      update: PUT vdc/data-service/vpools/{id}
+      reversal_operation: POST vdc/data-service/vpools/{id}/deactivate
+      reversal_kind: deactivate (soft delete)
+      window: not published
+      reactivation_operation: not published
+    - surface: Commodity Data Store
+      create: POST vdc/data-stores/commodity
+      reversal_operation: POST vdc/data-stores/{id}/deactivate
+      reversal_kind: deactivate (soft delete)
+      window: not published
+      reactivation_operation: not published
+      note: >-
+        Creation is asynchronous — GET vdc/data-stores/{id}/tasks/{taskId} polls it. An
+        agent must poll the task before it can know whether there is anything to reverse.
+    - surface: Object User
+      create: POST object/users
+      reversal_operation: POST object/users/deactivate
+      reversal_kind: deactivate (soft delete)
+      window: not published
+      reactivation_operation: not published
+    - surface: CAS secret
+      create: POST object/user-cas/secret/{uid}
+      reversal_operation: POST object/user-cas/secret/{uid}/deactivate
+      reversal_kind: deactivate
+      window: not published
+      reactivation_operation: not published
+    - surface: Data Services Virtual Array
+      create: POST vdc/data-services/varrays
+      update: PUT vdc/data-services/varrays/{id}
+      reversal_operation: DELETE vdc/data-services/varrays/{id}
+      reversal_kind: hard delete
+      window: none — this one is not soft
+      note: >-
+        The varray surface is the exception: it is a true HTTP DELETE with no deactivate
+        step, so it is NOT reversible. An agent must treat this operation differently from
+        every other delete in the API.
+    - surface: Bucket retention
+      update: PUT object/bucket/{id}/retention
+      reversal_operation: not published
+      reversal_kind: none
+      window: not published
+      note: >-
+        Object-lock style retention is by design one-way for the duration of the retention
+        period. Treat as irreversible within the retention window.
+  agent_guidance: >-
+    Before any ECS write, an agent should know three things this API does not tell it:
+    the operation is not idempotent, so a retried POST may create a second resource;
+    most deletes are deactivations whose recovery path is undocumented; and the varray
+    delete and bucket retention set are genuinely one-way. Escalate to a human for the
+    last two.
+cross_references:
+  errors: errors/emc-error-codes.yml
+  authentication: authentication/emc-authentication.yml
+  lifecycle: lifecycle/emc-lifecycle.yml
+  rate_limits: rate-limits/emc-rate-limits.yml
+  data_model: data-model/emc-data-model.yml

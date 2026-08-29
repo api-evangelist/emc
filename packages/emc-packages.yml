@@ -1,0 +1,234 @@
+generated: '2026-08-29'
+method: searched
+source: >-
+  Registry metadata read live from pypi.org, proxy.golang.org, search.maven.org,
+  azuresearch-usnc.nuget.org and registry.terraform.io on 2026-08-29, cross-checked
+  against the EMC-owned GitHub organizations github.com/EMCECS and github.com/dell.
+provider: EMC
+providerId: emc
+description: >-
+  First-party client libraries, SDKs and infrastructure-as-code providers published by
+  EMC (now Dell EMC / Dell Technologies) for the EMC storage platforms — ECS/ObjectScale
+  object storage, Unity, PowerMax (Unisphere for VMAX lineage), PowerScale (Isilon),
+  PowerFlex (ScaleIO) and PowerStore. Every entry below was resolved against its
+  registry metadata endpoint; version and published date are the values the registry
+  returned, not values read from prose.
+ownership_note: >-
+  EMC was acquired by Dell Technologies in 2016 and the engineering organization now
+  publishes under github.com/dell alongside the legacy github.com/EMCECS org. Both orgs
+  are treated here as EMC-controlled: EMCECS is the original EMC Elastic Cloud Storage
+  org, and the com.emc.ecs Maven group ID is EMC's own reverse-domain namespace.
+packages:
+  - name: PyU4V
+    registry: pypi
+    url: https://pypi.org/project/PyU4V/
+    repository: https://github.com/dell/PyU4V
+    language: Python
+    official: true
+    version: 10.4.0.0
+    published: '2026-04-22'
+    covers: EMC Unisphere REST API (Unisphere for PowerMax)
+    note: >-
+      Registry summary reads "A Python library for use with Dell EMC's Unisphere for
+      PowerMax REST API." Ships Unisphere API version 104 (10.4.0); base URL built by the
+      library as https://{server_ip}:{port}/univmax/restapi.
+  - name: storops
+    registry: pypi
+    url: https://pypi.org/project/storops/
+    repository: https://github.com/emc-openstack/storops
+    language: Python
+    official: true
+    version: 1.2.12
+    published: '2025-07-30'
+    covers: EMC Unity and VNX storage arrays
+    note: >-
+      Registry summary reads "Python API for VNX and Unity." Published from the
+      emc-openstack GitHub organization. Last release is over a year old — the weakest
+      currency signal in this set.
+  - name: python-ecsclient
+    registry: pypi
+    url: https://pypi.org/project/python-ecsclient/
+    repository: https://github.com/EMCECS/python-ecsclient
+    language: Python
+    official: true
+    version: 1.1.12
+    published: '2022-06-16'
+    covers: EMC ECS Management REST API
+    note: >-
+      "A library for interacting with the ECS Management API", published from EMC's own
+      EMCECS org. ABANDONMENT SIGNAL: the last release predates ECS 3.8.x and
+      ObjectScale 4.0 by years, so the only first-party Python binding for the ECS
+      Management API is materially behind the platform it wraps.
+  - name: PyPowerStore
+    registry: pypi
+    url: https://pypi.org/project/PyPowerStore/
+    repository: https://github.com/dell/python-powerstore
+    language: Python
+    official: true
+    version: 3.5.0.0
+    published: '2026-06-23'
+    covers: Dell PowerStore REST API
+  - name: PyPowerFlex
+    registry: pypi
+    url: https://pypi.org/project/PyPowerFlex/
+    repository: https://github.com/dell/python-powerflex
+    language: Python
+    official: true
+    version: 2.0.0
+    published: '2025-09-30'
+    covers: Dell PowerFlex (formerly EMC ScaleIO) REST API
+  - name: github.com/dell/gounity
+    registry: go
+    url: https://pkg.go.dev/github.com/dell/gounity
+    repository: https://github.com/dell/gounity
+    language: Go
+    official: true
+    version: v1.24.0
+    published: '2026-05-12'
+    covers: EMC Unity REST API
+  - name: github.com/dell/gopowermax/v2
+    registry: go
+    url: https://pkg.go.dev/github.com/dell/gopowermax/v2
+    repository: https://github.com/dell/gopowermax
+    language: Go
+    official: true
+    version: v2.13.1
+    published: '2026-06-18'
+    covers: EMC Unisphere REST API (PowerMax / VMAX lineage)
+  - name: github.com/dell/goisilon
+    registry: go
+    url: https://pkg.go.dev/github.com/dell/goisilon
+    repository: https://github.com/dell/goisilon
+    language: Go
+    official: true
+    version: v1.22.0
+    published: '2026-05-12'
+    covers: EMC Isilon / PowerScale OneFS API
+  - name: github.com/dell/goscaleio
+    registry: go
+    url: https://pkg.go.dev/github.com/dell/goscaleio
+    repository: https://github.com/dell/goscaleio
+    language: Go
+    official: true
+    version: v1.23.0
+    published: '2026-05-12'
+    covers: EMC ScaleIO / PowerFlex REST API
+  - name: github.com/dell/gopowerstore
+    registry: go
+    url: https://pkg.go.dev/github.com/dell/gopowerstore
+    repository: https://github.com/dell/gopowerstore
+    language: Go
+    official: true
+    version: v1.22.0
+    published: '2026-05-12'
+    covers: Dell PowerStore REST API
+  - name: com.emc.ecs:object-client
+    registry: maven
+    url: https://search.maven.org/artifact/com.emc.ecs/object-client
+    repository: https://github.com/EMCECS/ecs-object-client-java
+    language: Java
+    official: true
+    version: 4.0.0-rc.2
+    published: '2025-05-13'
+    covers: EMC ECS object (S3/Swift/Atmos) protocol client
+    note: Latest published coordinate is a release candidate, not a GA release.
+  - name: com.emc.ecs:smart-client-ecs
+    registry: maven
+    url: https://search.maven.org/artifact/com.emc.ecs/smart-client-ecs
+    repository: https://github.com/EMCECS/smart-client-java
+    language: Java
+    official: true
+    version: 4.0.0-rc.1
+    published: '2023-12-04'
+    covers: Load-balancing REST client for ECS
+  - name: com.emc.ecs:atmos-client
+    registry: maven
+    url: https://search.maven.org/artifact/com.emc.ecs/atmos-client
+    repository: https://github.com/EMCECS/atmos-client-java
+    language: Java
+    official: true
+    version: 3.2.1
+    published: '2021-09-10'
+    covers: EMC Atmos object protocol (also served by ECS)
+  - name: com.emc.ecs:nfs-client
+    registry: maven
+    url: https://search.maven.org/artifact/com.emc.ecs/nfs-client
+    repository: https://github.com/EMCECS/nfs-client-java
+    language: Java
+    official: true
+    version: 1.1.0
+    published: '2022-07-15'
+    covers: Native Java NFSv3 client for ECS file access
+  - name: com.emc.ecs:mgmt-client
+    registry: maven
+    url: https://search.maven.org/artifact/com.emc.ecs/mgmt-client
+    repository: https://github.com/EMCECS
+    language: Java
+    official: true
+    version: 0.1.0
+    published: '2019-04-15'
+    covers: EMC ECS Management REST API
+    note: >-
+      Version 0.1.0, last published 2019 — the Java binding for the ECS Management API
+      never left an initial release.
+  - name: ECSManagementSDK
+    registry: nuget
+    url: https://www.nuget.org/packages/ECSManagementSDK
+    language: .NET
+    official: true
+    version: 1.3.0
+    published: null
+    covers: EMC ECS Management REST API
+    note: >-
+      Registry description reads "DELL EMC ECS Management API SDK for .NET." NuGet search
+      returned the id and version but no published date in the search response; the date
+      was not resolved against the flat-container endpoint, so it is recorded null rather
+      than guessed.
+  - name: EMC.ECSManagementSDK
+    registry: nuget
+    url: https://www.nuget.org/packages/EMC.ECSManagementSDK
+    language: .NET
+    official: true
+    version: 1.2.3
+    published: null
+    covers: EMC ECS Management REST API
+    note: Older EMC-namespaced id of the same .NET SDK; superseded by ECSManagementSDK.
+  - name: dell/objectscale
+    registry: terraform
+    url: https://registry.terraform.io/providers/dell/objectscale/latest
+    language: HCL
+    official: true
+    version: 1.1.0
+    published: '2026-06-24'
+    covers: ObjectScale — the ECS successor object storage platform
+  - name: dell/powermax
+    registry: terraform
+    url: https://registry.terraform.io/providers/dell/powermax/latest
+    language: HCL
+    official: true
+    version: 1.0.4
+    published: '2026-06-23'
+    covers: EMC Unisphere REST API (PowerMax)
+  - name: dell/powerscale
+    registry: terraform
+    url: https://registry.terraform.io/providers/dell/powerscale/latest
+    language: HCL
+    official: true
+    version: 1.8.2
+    published: '2026-06-24'
+    covers: EMC Isilon / PowerScale OneFS API
+  - name: dell/powerstore
+    registry: terraform
+    url: https://registry.terraform.io/providers/dell/powerstore/latest
+    language: HCL
+    official: true
+    version: 1.3.0
+    published: '2026-06-24'
+    covers: Dell PowerStore REST API
+currency_finding: >-
+  The split is sharp and worth stating plainly. The platforms Dell continues to invest in
+  — PowerStore, PowerScale, PowerMax, PowerFlex, ObjectScale — carry SDKs and Terraform
+  providers released within the last three months. The EMC-branded ECS Management API
+  bindings do not: the Python client last shipped in 2022, the Java management client in
+  2019 at version 0.1.0. A consumer integrating against the ECS Management REST API today
+  is working with first-party bindings that predate the current platform release.

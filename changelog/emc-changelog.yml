@@ -1,0 +1,60 @@
+generated: '2026-08-29'
+method: searched
+source: >-
+  https://github.com/EMCECS/ECS-CommunityEdition/releases (GitHub Releases API, read
+  2026-08-29). No developer-facing API changelog is published for the ECS Management REST
+  API or the Unisphere REST API on any reachable Dell or EMC surface.
+provider: EMC
+providerId: emc
+description: >-
+  EMC publishes no dated API changelog. The nearest public, dated release trail for the
+  platform behind the ECS Management REST API is the tag history of EMC's own ECS
+  Community Edition installer, where each tag names the ECS or ObjectScale build it
+  deploys. Entries below carry only what those tags state — no highlights or
+  breaking-change classification is asserted, because EMC publishes no release notes at
+  these URLs to read them from.
+scheme: platform build number (major.minor.patch.build)
+current_version: ECS 3.8.1.4
+successor_line: ObjectScale 4.0.0.0
+api_changelog_published: false
+entries:
+  - version: ECS 3.8.1.4
+    date: '2025-05-20'
+    tag: v2.9.1-3.8.1.4
+    breaking: unknown
+    highlights: not published
+  - version: ObjectScale 4.0.0.0
+    date: '2025-03-13'
+    tag: v2.9.1-4.0.0.0
+    breaking: unknown
+    highlights: >-
+      First ObjectScale-branded build in the Community Edition trail — the rebrand of the
+      ECS object platform.
+  - version: ECS 3.8.1.3
+    date: '2025-01-09'
+    tag: v2.9.1-3.8.1.3
+    breaking: unknown
+    highlights: not published
+  - version: ECS 3.8.1.2
+    date: '2025-01-09'
+    tag: v2.9.1-3.8.1.2
+    breaking: unknown
+    highlights: not published
+  - version: ECS 3.8.0.3
+    date: '2023-11-06'
+    tag: v2.9.1-3.8.0.3
+    breaking: unknown
+    highlights: not published
+  - version: ECS 3.8.0.1
+    date: '2022-12-15'
+    tag: v2.9.1-3.8.0.1
+    breaking: unknown
+    highlights: not published
+gaps:
+  - >-
+    No per-release API diff, no breaking-change flag, and no additions list. An integrator
+    cannot tell from any public source what changed in the ECS Management API between
+    3.7 and 3.8.
+  - >-
+    Release notes for each ECS build exist as Dell support PDFs behind www.dell.com/support,
+    which returns 403 to non-browser clients.

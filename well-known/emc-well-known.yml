@@ -1,0 +1,78 @@
+generated: '2026-08-29'
+method: probed
+source: >-
+  Live unauthenticated GET of each /.well-known/ path on 2026-08-29 with a browser
+  User-Agent. Statuses below are the codes actually returned.
+provider: EMC
+providerId: emc
+description: >-
+  /.well-known/ discovery surface for the hosts EMC (Dell EMC) serves its corporate and
+  developer properties from. One real document was found: an RFC 9116 security.txt at
+  www.dell.com. Every other path either 404s or 302s into the marketing site — including
+  /.well-known/api-catalog, which redirects to the Dell homepage rather than serving an
+  RFC 9727 catalog.
+hosts:
+  - host: www.dell.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        content_type: text/plain
+        file: emc-security.txt
+        note: >-
+          Real RFC 9116 document. NOTE: its own Expires field reads
+          2026-04-17T04:00:00.000Z, so the policy is EXPIRED as of this probe
+          (2026-08-29) and the file's trailing comment dates it to April 2025.
+      - path: /.well-known/openid-configuration
+        status: 302
+        file: null
+        note: Redirects to the Dell marketing site; no OIDC discovery document served.
+      - path: /.well-known/oauth-authorization-server
+        status: 302
+        file: null
+        note: Redirects to the Dell marketing site; no RFC 8414 metadata served.
+      - path: /.well-known/api-catalog
+        status: 302
+        file: null
+        note: >-
+          Redirects and ultimately renders the Dell USA homepage HTML — a soft 404, not
+          an RFC 9727 API catalog. Recorded as a miss.
+      - path: /.well-known/ai-plugin.json
+        status: 302
+        file: null
+        note: Redirects to the Dell marketing site; no plugin manifest served.
+  - host: developer.dell.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 302
+        file: null
+        note: >-
+          The developer portal answers 302 on every /.well-known/ path and resolves to
+          the Angular SPA shell (HTTP 200, text/html). An SPA catch-all, not a document.
+      - path: /.well-known/openid-configuration
+        status: 302
+        file: null
+      - path: /.well-known/oauth-authorization-server
+        status: 302
+        file: null
+      - path: /.well-known/api-catalog
+        status: 302
+        file: null
+      - path: /.well-known/ai-plugin.json
+        status: 302
+        file: null
+      - path: /.well-known/agent-card.json
+        status: 302
+        file: null
+        note: >-
+          Resolves to the SPA shell (200, text/html, <!DOCTYPE html>). Rejected as an
+          agent card per the pipeline's HTML false-positive rule. No a2a/ artifact written.
+      - path: /.well-known/agent.json
+        status: 302
+        file: null
+        note: Same SPA catch-all; no pre-0.3 agent card either.
+llms_txt_finding: >-
+  https://www.dell.com/llms.txt returns HTTP 200 text/plain and is a real, substantial
+  llms.txt — but it is a Dell Technologies retail commerce index (laptops, desktops,
+  monitors, gaming PCs). It contains nothing about the EMC storage APIs, ECS, Unisphere
+  or developer.dell.com, so it is recorded here as a finding and is NOT wired as this
+  provider's LLMsTxt pointer. See llms/emc-llms.txt for the generated EMC-scoped file.

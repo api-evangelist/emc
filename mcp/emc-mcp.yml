@@ -1,0 +1,144 @@
+generated: '2026-08-29'
+method: derived
+source: >-
+  Searched for a first-party EMC/Dell MCP server across github.com/dell (GitHub search
+  API), the npm registry, and the web on 2026-08-29. Candidate tools below are derived
+  from the real operation surface in EMC's own client,
+  https://github.com/EMCECS/python-ecsclient — not from an OpenAPI, because none was
+  reachable.
+provider: EMC
+providerId: emc
+api: EMC ECS Management REST API
+status: candidate
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: searched
+search_findings:
+  first_party:
+    - repo: https://github.com/dell/iDRAC-MCP-Reference-Server-and-Tools
+      updated: '2026-05-28'
+      relevant: false
+      note: >-
+        Dell does publish a first-party MCP reference server — but for iDRAC, the
+        PowerEdge server out-of-band controller, which is Dell's server line and not the
+        EMC storage portfolio this profile covers. Recorded so the absence here is not
+        mistaken for Dell having no MCP work at all.
+  third_party:
+    - repo: https://github.com/sachdev27/dell-powerstore-mcp-server
+      relevant: partial
+      first_party: false
+      note: >-
+        A third-party MCP server that generates ~262 tools from the Dell PowerStore
+        OpenAPI. It is a useful signal that the PowerStore spec is obtainable by someone
+        with array access, but it is not published by Dell or EMC and confers no agent
+        surface on this provider.
+    - repo: https://github.com/sachdev27/dell-isilon-mcp-server
+      relevant: partial
+      first_party: false
+      note: Third-party MCP server for the PowerScale (Isilon) OneFS API.
+  conclusion: >-
+    EMC ships no MCP server for the ECS Management REST API or the Unisphere REST API,
+    hosted or stdio. mode is `none` and no endpoint is asserted. The tools below are a
+    derived candidate set showing what an ECS MCP server would expose if one existed.
+candidate_tools:
+  - name: ecs_list_buckets
+    description: List buckets in a namespace, paged by marker and limit.
+    rest: GET object/bucket?namespace={namespace}&marker={marker}&limit={limit}
+    consequence: read
+  - name: ecs_create_bucket
+    description: Create a bucket in a namespace.
+    rest: POST object/bucket
+    consequence: write
+    reversible: false
+  - name: ecs_set_bucket_owner
+    description: Change the owning object user of a bucket.
+    rest: POST object/bucket/{id}/owner
+    consequence: write
+  - name: ecs_set_bucket_retention
+    description: Set the retention period on a bucket.
+    rest: PUT object/bucket/{id}/retention
+    consequence: write
+    reversible: false
+    escalation: >-
+      Irreversible within the retention window. Should require human confirmation.
+  - name: ecs_list_namespaces
+    description: List namespaces on the VDC.
+    rest: GET object/namespaces
+    consequence: read
+  - name: ecs_create_namespace
+    description: Create a tenancy namespace.
+    rest: POST object/namespaces/namespace
+    consequence: write
+  - name: ecs_deactivate_namespace
+    description: Soft-delete a namespace.
+    rest: POST object/namespaces/namespace/{id}/deactivate
+    consequence: destructive
+    escalation: Recovery window is not published by EMC. Should require human confirmation.
+  - name: ecs_list_object_users
+    description: List data-plane object users.
+    rest: GET object/users
+    consequence: read
+  - name: ecs_create_object_user
+    description: Create an object user for S3/Swift/Atmos access.
+    rest: POST object/users
+    consequence: write
+  - name: ecs_deactivate_object_user
+    description: Deactivate an object user.
+    rest: POST object/users/deactivate
+    consequence: destructive
+  - name: ecs_list_vdcs
+    description: List Virtual Data Centers in the federation.
+    rest: GET object/vdcs/vdc/list
+    consequence: read
+  - name: ecs_list_replication_groups
+    description: List data-service virtual pools (replication groups).
+    rest: GET vdc/data-service/vpools
+    consequence: read
+  - name: ecs_add_varrays_to_vpool
+    description: Add storage pools to a replication group.
+    rest: PUT vdc/data-service/vpools/{id}/addvarrays
+    consequence: write
+  - name: ecs_list_storage_pools
+    description: List data-services virtual arrays (storage pools).
+    rest: GET vdc/data-services/varrays
+    consequence: read
+  - name: ecs_delete_storage_pool
+    description: Delete a storage pool.
+    rest: DELETE vdc/data-services/varrays/{id}
+    consequence: destructive
+    reversible: false
+    escalation: >-
+      A true hard DELETE with no deactivate step — the only non-reversible delete in the
+      management API. Must require human confirmation.
+  - name: ecs_get_capacity
+    description: Read cluster capacity metrics.
+    rest: GET vdc/capacity
+    consequence: read
+  - name: ecs_list_alerts
+    description: List active system alerts.
+    rest: GET vdc/alerts
+    consequence: read
+  - name: ecs_get_billing
+    description: Read namespace and bucket metering records for chargeback.
+    rest: GET object/billing
+    consequence: read
+  - name: ecs_whoami
+    description: Identify the authenticated management user.
+    rest: GET user/whoami
+    consequence: read
+  - name: ecs_get_license
+    description: Read the ECS licence record.
+    rest: GET license
+    consequence: read
+notes:
+  - >-
+    No tool crosswalk artifact is written. The crosswalk exists to bind MCP tools to
+    OpenAPI operationIds; there is neither an MCP server nor an OpenAPI here, so a
+    crosswalk would have nothing real on either side to bind.
+  - >-
+    Any real ECS MCP server would be customer-hosted alongside the array, not a vendor
+    endpoint — the same constraint that makes a status page meaningless here.

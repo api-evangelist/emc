@@ -1,0 +1,60 @@
+generated: '2026-08-29'
+method: searched
+source: >-
+  https://github.com/EMCECS/ECS-CommunityEdition (EMC's own GitHub organization) and a
+  probe of https://portal.ecstestdrive.com/ on 2026-08-29.
+provider: EMC
+providerId: emc
+description: >-
+  EMC does not run a hosted API sandbox with test keys the way a SaaS provider does — the
+  product is an appliance. What it publishes instead is a free, self-deployable full build
+  of the platform: ECS Community Edition, which installs a real ECS cluster (management
+  API included) on commodity hardware or VMs. For an integrator wanting to develop against
+  the ECS Management REST API without buying an array, this is the sandbox.
+sandboxes:
+  - name: ECS Community Edition
+    type: self-hosted free build
+    url: https://github.com/EMCECS/ECS-CommunityEdition
+    http_status: 200
+    tagline: 'ECS Community Edition "Free & Frictionless"'
+    latest_release: v2.9.1-3.8.1.4
+    latest_release_date: '2025-05-20'
+    covers:
+      - EMC ECS Management REST API
+      - S3, Swift, Atmos and CAS data-plane protocols
+    cost: free
+    note: >-
+      Each release tag names the ECS or ObjectScale platform build it installs, so a
+      developer can pin a sandbox to a specific platform version. The installer node is
+      versioned separately (2.9.1) from the platform it deploys.
+  - name: ECS Test Drive
+    type: hosted trial portal
+    url: https://portal.ecstestdrive.com/
+    http_status: '000 — connection refused'
+    covers: EMC ECS Management REST API and object endpoints
+    note: >-
+      EMC's hosted ECS trial, historically the source of free S3-compatible test
+      credentials and of the public ECS API documentation mirror at
+      /Document/ECS/3.8/apidocs/. The host refused the connection on 2026-08-29
+      (TCP connect to 12.7.200.31:443 rejected), so it could not be verified as live.
+      Recorded honestly as unreachable rather than dropped or assumed dead.
+test_credentials:
+  published: false
+  note: >-
+    No fixed test keys, magic identifiers or fixture values are published. Credentials in
+    a Community Edition deployment are set by whoever installs it. Nothing is asserted here
+    because there is nothing published to assert.
+test_clocks:
+  supported: false
+fixtures_and_triggers:
+  published: false
+  related_tooling:
+    - name: cosbench
+      url: https://github.com/EMCECS/cosbench
+      note: EMC-published benchmark harness for cloud object storage — load generation, not fixtures.
+    - name: s3curl
+      url: https://github.com/EMCECS/s3curl
+      note: EMC-maintained S3 request-signing CLI for hand-testing the object endpoints.
+    - name: bucket-wipe
+      url: https://github.com/EMCECS/bucket-wipe
+      note: EMC-published teardown utility; published to Maven as com.emc.ecs:bucket-wipe 2.2.0.

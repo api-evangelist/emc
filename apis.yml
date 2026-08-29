@@ -1,11 +1,16 @@
 aid: emc
 name: EMC
-description: >-
-  EMC Corporation (now Dell EMC, a division of Dell Technologies) provides
-  enterprise storage, data management, and cloud infrastructure solutions. EMC
-  products include VMAX, VNX, Isilon, and ECS storage platforms, as well as
-  data protection and information management solutions. EMC was acquired by
-  Dell Technologies in 2016.
+description: 'EMC Corporation, acquired by Dell Technologies in 2016 and now operating as Dell EMC, builds
+  enterprise storage, data management and data protection platforms — ECS/ObjectScale object storage,
+  Unity, VNX, PowerMax (VMAX lineage), PowerScale (Isilon) and PowerFlex (ScaleIO). Two management APIs
+  are profiled: the ECS Management REST API and the Unisphere REST API. Both are appliance APIs served
+  on port 4443 and 8443 by hardware the customer owns, so there is no EMC-operated endpoint, no API key,
+  no plan and no rate limit — a fact that shapes every artifact in this repo. ECS is multi-protocol, implementing
+  the Amazon S3, OpenStack Swift, EMC Atmos, EMC CAS, HDFS and NFSv3 interfaces, which means an S3-speaking
+  application integrates by changing an endpoint rather than writing a connector. No OpenAPI is publicly
+  downloadable: Dell publishes references on developer.dell.com, but the portal is a client-rendered SPA
+  whose specification API returns HTTP 401 to anonymous callers, so this profile is built from EMC''s
+  own published client libraries on github.com/EMCECS and github.com/dell.'
 type: Index
 deliveryModel:
   model: unknown
@@ -31,99 +36,197 @@ accessModel:
   generated: '2026-07-22'
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/emc.png
-url: >-
-  https://raw.githubusercontent.com/api-evangelist/emc/refs/heads/main/apis.yml
+url: https://raw.githubusercontent.com/api-evangelist/emc/refs/heads/main/apis.yml
 created: '2026-03-24'
-modified: '2026-04-18'
+modified: '2026-08-29'
 specificationVersion: '0.23'
 tags:
-  - Cloud Infrastructure
-  - Data Management
-  - Data Protection
-  - Enterprise Storage
-  - Storage
-  - Fortune 500
+- Cloud Infrastructure
+- Data Management
+- Data Protection
+- Enterprise Storage
+- Object Storage
+- Storage
+- S3 Compatible
+- Fortune 500
 apis:
-  - aid: emc:ecs-management-api
-    name: EMC ECS Management REST API
-    description: >-
-      The ECS Management REST API provides programmatic access to manage Dell EMC
-      Elastic Cloud Storage (ECS) object storage platform. It supports namespace
-      management, user management, storage pool configuration, replication groups,
-      bucket management, and monitoring operations.
-    humanURL: https://www.dell.com/support/kbdoc/en-us/000020064/ecs-api-documentation
-    baseURL: https://ecs.example.com:4443
-    tags:
-      - Buckets
-      - Cloud Storage
-      - Namespaces
-      - Object Storage
-    properties:
-      - type: Documentation
-        url: https://www.dell.com/support/kbdoc/en-us/000020064/ecs-api-documentation
-    contact:
-      - type: Support
-        url: https://www.dell.com/support/home/en-us
-  - aid: emc:unisphere-api
-    name: EMC Unisphere REST API
-    description: >-
-      The Unisphere Management REST API provides programmatic access to manage
-      Dell EMC Unity and PowerStore storage arrays. It supports storage resource
-      provisioning, performance monitoring, alert management, and system
-      configuration operations.
-    humanURL: https://www.dell.com/support/kbdoc/en-us/000020064/ecs-api-documentation
-    baseURL: https://unity.example.com/api
-    tags:
-      - Enterprise Storage
-      - Management
-      - Monitoring
-      - Storage Arrays
-    properties:
-      - type: Documentation
-        url: https://www.dell.com/support/kbdoc/en-us/000020064/ecs-api-documentation
-    contact:
-      - type: Support
-        url: https://www.dell.com/support/home/en-us
-common:
-  - type: VulnerabilityDisclosure
-    url: security/emc-vulnerability-disclosure.yml
-  - type: DomainSecurity
-    url: security/emc-domain-security.yml
-  - type: GitHubOrganization
-    url: https://github.com/emccorp
-  - type: LinkedIn
-    url: https://www.linkedin.com/company/emc-corporation
+- aid: emc:ecs-management-api
+  name: EMC ECS Management REST API
+  description: The ECS Management REST API provides programmatic access to manage Dell EMC Elastic Cloud
+    Storage (ECS) object storage platform. It supports namespace management, user management, storage
+    pool configuration, replication groups, bucket management, and monitoring operations.
+  humanURL: https://developer.dell.com/apis/ad8e9080-cf9c-45c2-8a3d-f9db7e545bb4/versions/3.8.1/docs
+  baseURL: https://{ecs_management_host}:4443
+  tags:
+  - Buckets
+  - Cloud Storage
+  - Namespaces
+  - Object Storage
+  properties:
   - type: Documentation
-    url: https://www.dell.com/support/kbdoc/en-us/000020064/ecs-api-documentation
+    url: https://developer.dell.com/apis/ad8e9080-cf9c-45c2-8a3d-f9db7e545bb4/versions/3.8.1/docs
+  - type: APIReference
+    url: https://developer.dell.com/apis
+  - type: ErrorCatalog
+    url: errors/emc-error-codes.yml
+  - type: DataModel
+    url: data-model/emc-data-model.yml
+  - type: MCPServer
+    url: mcp/emc-mcp.yml
+  contact:
   - type: Support
     url: https://www.dell.com/support/home/en-us
-  - type: DeveloperPortal
-    url: https://developer.dell.com/
-  - type: Features
-    data:
-      - Enterprise-grade object and block storage
-      - Multi-protocol support (S3, Swift, Atmos, HDFS)
-      - Geo-distributed replication
-      - Namespace and tenant management
-      - Role-based access control
-      - Performance monitoring and alerting
-      - Storage pool and provisioning management
-  - type: UseCases
-    data:
-      - Managing enterprise storage infrastructure programmatically
-      - Automating storage provisioning for cloud workloads
-      - Monitoring storage array health and performance
-      - Configuring data protection and replication policies
-      - Managing multi-tenant storage environments
-  - type: Integrations
-    data:
-      - VMware vSphere
-      - Microsoft Hyper-V
-      - Amazon S3
-      - OpenStack Swift
-      - Hadoop HDFS
-      - Kubernetes CSI
-      - Ansible
+  x-base-url-note: 'Templated, not a placeholder. ECS is a customer-installed appliance: the ECS Management
+    REST API is served on port 4443 by the customer''s own ECS or ObjectScale cluster, so there is no
+    EMC-operated host. The previous value (https://ecs.example.com:4443) was an RFC 2606 documentation
+    placeholder and scored as non-routable; the templated form names the real port and says a customer-supplied
+    host is required. Port confirmed from EMC''s own client, github.com/EMCECS/python-ecsclient.'
+- aid: emc:unisphere-api
+  name: EMC Unisphere REST API
+  description: The Unisphere Management REST API provides programmatic access to manage Dell EMC Unity
+    and PowerStore storage arrays. It supports storage resource provisioning, performance monitoring,
+    alert management, and system configuration operations.
+  humanURL: https://developer.dell.com/apis
+  baseURL: https://{unisphere_host}:8443/univmax/restapi
+  tags:
+  - Enterprise Storage
+  - Management
+  - Monitoring
+  - Storage Arrays
+  properties:
+  - type: Documentation
+    url: https://developer.dell.com/apis
+  - type: APIReference
+    url: https://developer.dell.com/apis
+  - type: SourceCode
+    url: https://github.com/dell/PyU4V
+  contact:
+  - type: Support
+    url: https://www.dell.com/support/home/en-us
+  x-base-url-note: Templated, not a placeholder. Unisphere runs on the customer's own management host.
+    Base path and port read from EMC's own first-party client github.com/dell/PyU4V, which builds https://{server_ip}:{port}/univmax/restapi
+    (enhanced API at /univmax/rest). Replaces the non-routable placeholder https://unity.example.com/api.
+common:
+- type: VulnerabilityDisclosure
+  url: security/emc-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/emc-domain-security.yml
+- type: GitHubOrganization
+  url: https://github.com/emccorp
+- type: LinkedIn
+  url: https://www.linkedin.com/company/emc-corporation
+- type: Documentation
+  url: https://developer.dell.com/apis
+- type: Support
+  url: https://www.dell.com/support/home/en-us
+- type: DeveloperPortal
+  url: https://developer.dell.com/
+- type: Features
+  data:
+  - Enterprise-grade object and block storage
+  - Multi-protocol support (S3, Swift, Atmos, HDFS)
+  - Geo-distributed replication
+  - Namespace and tenant management
+  - Role-based access control
+  - Performance monitoring and alerting
+  - Storage pool and provisioning management
+- type: UseCases
+  data:
+  - Managing enterprise storage infrastructure programmatically
+  - Automating storage provisioning for cloud workloads
+  - Monitoring storage array health and performance
+  - Configuring data protection and replication policies
+  - Managing multi-tenant storage environments
+- type: Integrations
+  data:
+  - VMware vSphere
+  - Microsoft Hyper-V
+  - Amazon S3
+  - OpenStack Swift
+  - Hadoop HDFS
+  - Kubernetes CSI
+  - Ansible
+- type: Packages
+  url: packages/emc-packages.yml
+- type: SDKs
+  url: packages/emc-packages.yml
+- type: WellKnown
+  url: well-known/emc-well-known.yml
+- type: SecurityTxt
+  url: well-known/emc-security.txt
+- type: Security
+  url: security/emc-vulnerability-disclosure.yml
+- type: TrustCenter
+  url: security/emc-trust-center.yml
+- type: Compliance
+  url: conformance/emc-conformance.yml
+- type: Conformance
+  url: conformance/emc-conformance.yml
+- type: ErrorCatalog
+  url: errors/emc-error-codes.yml
+- type: Authentication
+  url: authentication/emc-authentication.yml
+- type: Conventions
+  url: conventions/emc-conventions.yml
+- type: DataModel
+  url: data-model/emc-data-model.yml
+- type: Lifecycle
+  url: lifecycle/emc-lifecycle.yml
+- type: ChangeLog
+  url: changelog/emc-changelog.yml
+- type: MCPServer
+  url: mcp/emc-mcp.yml
+- type: Sandbox
+  url: sandbox/emc-sandbox.yml
+- type: LLMsTxt
+  url: llms/emc-llms.txt
+- type: Vocabulary
+  url: vocabulary/emc-vocabulary.yml
+- type: RateLimits
+  url: rate-limits/emc-rate-limits.yml
+- type: Plans
+  url: plans/emc-plans-pricing.yml
+- type: FinOps
+  url: finops/emc-finops.yml
+- type: APIReference
+  url: https://developer.dell.com/apis
+- type: Blog
+  url: https://www.dell.com/en-us/blog/
+- type: TermsOfService
+  url: https://www.dell.com/en-us/lp/terms-of-sale
+- type: PrivacyPolicy
+  url: https://www.dell.com/en-us/lp/legal/privacy-statement
+- type: SignUp
+  url: https://www.dell.com/en-us/lp/sign-in
+- type: Website
+  url: https://www.delltechnologies.com/en-us/index.htm
+- type: SourceCode
+  url: https://github.com/EMCECS
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com
+x-coverage:
+  state: covered
+  reason: no-machine-readable-spec
+  detail: 'Enrichment completed with real harvested artifacts, but no machine-readable contract could
+    be obtained: developer.dell.com renders its API references client-side and its specification backend
+    returns HTTP 401 to every anonymous request, so the ECS and Unisphere OpenAPIs are portal-gated rather
+    than published. The API surface recorded here was reconstructed from EMC''s own first-party client
+    libraries instead.'
+  evidence:
+  - url: https://developer.dell.com/api/apis
+    status: 401
+  - url: https://developer.dell.com/apis/ad8e9080-cf9c-45c2-8a3d-f9db7e545bb4/versions/3.8.1/reference/openapi.json
+    status: 200
+  - url: https://www.dell.com/.well-known/security.txt
+    status: 200
+  - url: https://www.dell.com/.well-known/api-catalog
+    status: 302
+  - url: https://portal.ecstestdrive.com/
+    status: 0
+  checked: '2026-08-29'
+x-enrichment:
+  date: '2026-08-29'
+  status: enriched
+  artifacts_added: 14
+  pass: local-v1

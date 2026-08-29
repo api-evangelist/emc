@@ -1,0 +1,54 @@
+generated: '2026-08-29'
+method: searched
+source: https://www.dell.com/en-us/dt/about-us/security-and-trust-center/index.htm
+provider: EMC
+providerId: emc
+url: https://www.dell.com/en-us/dt/about-us/security-and-trust-center/index.htm
+alternate_urls:
+  - https://www.dell.com/en-us/lp/dt/security-and-trust-center
+http_status: 200
+description: >-
+  Dell Technologies operates a public Security and Trust Center covering the organization
+  that builds and operates the EMC storage portfolio. It names seventeen distinct
+  certification and assessment programs and links a product-security, secure-development
+  and supply-chain surface. The reports themselves are not downloadable — Dell directs
+  customers to a sales or service representative to obtain SOC reports.
+certifications:
+  - ISO 27001
+  - SOC 1 Type 2
+  - SOC 2 Type 2
+  - PCI DSS (Level 2 Merchant)
+  - Common Criteria (EAL2+, ALC_FLR.2)
+  - O-TTPS / ISO-IEC 20243:2023
+  - TISAX
+  - IRAP
+  - Cyber Essentials
+  - Esquema Nacional de Seguridad (ENS)
+  - NHS DSPT
+  - Swift CSP
+  - JOSCAR
+  - CyberGRX
+  - CyberVadis
+  - KY3P
+  - EU Data Act
+programs:
+  - name: Security Advisories
+    url: https://www.dell.com/support/security/en-us/
+  - name: Dell Vulnerability Response Policy
+    url: https://www.dell.com/support/dell-vulnerability-response-policy
+  - name: Secure Development Lifecycle
+    url: https://www.dell.com/en-us/lp/dt/secure-development
+  - name: Supply Chain Security
+    url: https://www.delltechnologies.com/asset/en-us/solutions/business-solutions/legal-pricing/dell-supply-chain-security.pdf
+  - name: Privacy Center
+    url: https://www.dell.com/en-us/lp/dt/privacy-center
+report_access: >-
+  Gated. Dell states that compliance reports are obtained by contacting a dedicated sales
+  and service representative; no self-serve download or NDA portal is published.
+evidence:
+  - url: https://www.dell.com/en-us/dt/about-us/security-and-trust-center/index.htm
+    status: 200
+    kind: trust center (live fetch, certifications read from page body)
+  - url: https://www.dell.com/en-us/lp/dt/security-and-trust-center
+    status: 200
+    kind: alternate landing page

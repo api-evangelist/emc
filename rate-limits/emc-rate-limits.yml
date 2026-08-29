@@ -3,95 +3,47 @@ specificationVersion: '0.1'
 schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
 provider: EMC
 providerId: emc
-created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
+generated: '2026-08-29'
+method: searched
+modified: '2026-08-29'
+source: >-
+  Searched the reachable EMC/Dell developer surface and read EMC's own first-party clients
+  (github.com/EMCECS/python-ecsclient, github.com/dell/PyU4V) on 2026-08-29 for
+  rate-limit handling. Neither client sets, reads, or retries on any rate-limit header.
 tags:
   - Cloud Infrastructure
-  - Data Management
-  - Data Protection
   - Enterprise Storage
-  - Storage
+  - Object Storage
   - Rate Limiting
-  - Quotas
-  - Throttling
-description: Machine-readable rate limit definitions for the EMC API surface. Captures per-tier quotas,
-  burst behavior, response signaling, and recovery semantics. Defaults are scaffold values to be replaced
-  with published provider limits.
+description: >-
+  Rate limits for the EMC management APIs. There are none published, and this file records
+  that as a measurement rather than omitting itself. NOTE: this artifact previously
+  contained scaffold values — invented free/professional tiers with 10 and 100
+  requests-per-minute quotas — written by the 2026-05-04 bulk sweep. Those were never
+  EMC's numbers and have been removed.
+limit_count: 0
+limits: []
 headers:
-  limit: X-RateLimit-Limit
-  remaining: X-RateLimit-Remaining
-  reset: X-RateLimit-Reset
-  retryAfter: Retry-After
-  policy: RateLimit-Policy
+  published: false
+  limit: null
+  remaining: null
+  reset: null
+  retryAfter: null
+  policy: null
 responseCodes:
-  throttled: 429
-  quotaExceeded: 429
-  serviceUnavailable: 503
-limits:
-  - tier: free
-    name: Free Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 10
-    burst: 20
-    timeFrame: minute
-    applies:
-      - EMC ECS Management REST API
-      - EMC Unisphere REST API
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
-    timeFrame: month
-    applies:
-      - EMC ECS Management REST API
-      - EMC Unisphere REST API
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 100
-    burst: 200
-    timeFrame: minute
-    applies:
-      - EMC ECS Management REST API
-      - EMC Unisphere REST API
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - EMC ECS Management REST API
-      - EMC Unisphere REST API
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
-    applies:
-      - EMC ECS Management REST API
-      - EMC Unisphere REST API
-policies:
-  - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
-maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+  throttled: null
+  quotaExceeded: null
+finding: >-
+  The EMC ECS Management REST API and the Unisphere REST API are appliance APIs served by
+  hardware the customer owns and operates. There is no EMC-operated gateway between the
+  caller and the array, no per-key quota, and no metered plan — so there is nothing for
+  EMC to rate-limit and nothing to publish. Throughput is bounded by the customer's own
+  cluster. EMC's own client libraries carry no RateLimit-*, X-RateLimit-* or Retry-After
+  handling of any kind, and no 429 appears anywhere in the 176-code ECS error registry
+  (see errors/emc-error-codes.yml), which is strong corroboration that the API does not
+  emit one.
+agent_impact: >-
+  An agent gets no runtime backpressure signal from these APIs. The only availability
+  signal published is ECS error code 6000, "Unable to connect to the service. The service
+  is unavailable, try again later", together with the per-response `retryable` boolean in
+  the error envelope. Those are the retry primitives; there is no reset time to wait for.

@@ -1,0 +1,116 @@
+generated: '2026-08-29'
+method: searched
+source: >-
+  https://github.com/EMCECS/python-ecsclient (ecsclient/baseclient.py,
+  ecsclient/common/token_request.py) and https://github.com/dell/PyU4V
+  (PyU4V/rest_requests.py, PyU4V/univmax_conn.py, PyU4V/version.py) — EMC's own
+  first-party client libraries, read on 2026-08-29.
+provider: EMC
+providerId: emc
+description: >-
+  Authentication profile for the two EMC management APIs in this profile. Both are
+  customer-hosted appliance APIs, so there is no EMC-operated authorization server, no
+  OAuth, and no developer-portal API key. Authentication is HTTP Basic against the
+  customer's own array, exchanged for a session token. The mechanics below are read from
+  EMC's own shipped client code rather than from prose, because the reference
+  documentation on developer.dell.com is behind an authenticated portal API.
+no_oauth_note: >-
+  Neither API declares an OAuth 2.0 or OpenID Connect flow, and no /.well-known/
+  oauth-authorization-server or openid-configuration document is served on any EMC or
+  Dell host probed (see well-known/emc-well-known.yml). No scopes/ artifact is written:
+  there is no scope surface to record, and an empty OAuthScopes file would be a false
+  claim of an authorization model these APIs do not have.
+apis:
+  - api: EMC ECS Management REST API
+    schemes:
+      - id: ecs_basic_login
+        type: http
+        scheme: basic
+        in: header
+        header: Authorization
+        applies_to: The login exchange only
+        description: >-
+          A username and password are sent as HTTP Basic credentials to the ECS login
+          endpoint. The credentials are never used on subsequent resource calls.
+      - id: ecs_sds_auth_token
+        type: apiKey
+        in: header
+        header: X-SDS-AUTH-TOKEN
+        applies_to: Every ECS Management API call after login
+        description: >-
+          The login response returns the session token in the `x-sds-auth-token` RESPONSE
+          header. Clients read it off the response headers and replay it as the
+          `X-SDS-AUTH-TOKEN` REQUEST header on every subsequent call. The header name is
+          case-insensitive in practice — EMC's own client writes it lowercase when
+          reading and uppercase when sending.
+    session:
+      login: GET /login
+      logout: GET /logout
+      logout_force_param: >-
+        `force=true` terminates every simultaneous session for the current user, not just
+        the calling one.
+      whoami: GET /user/whoami
+      token_lifetime: >-
+        Not published. EMC's client does not encode an expiry; it caches the token to
+        disk and re-authenticates when a validation call returns 401, 403 or 415.
+      revalidation_signal: >-
+        HTTP 401, 403 or 415 on a token-validation call means "token stale, fetch a new
+        one". HTTP 500 or anything else is raised as an error rather than retried.
+    additional_headers:
+      - name: X-EMC-Override
+        required: false
+        description: >-
+          Optional override header exposed by EMC's client as `override_header`. Used to
+          force operations the API would otherwise refuse.
+      - name: Accept
+        required: true
+        value: application/json
+    transport:
+      tls: required
+      port: 4443
+      certificate_note: >-
+        EMC's own client defaults `verify_ssl=False` and explicitly disables urllib3
+        warnings, because ECS appliances ship with self-signed certificates by default.
+        This is a real posture finding, not a recommendation: the shipped default for the
+        first-party client is to not verify the array's certificate.
+  - api: EMC Unisphere REST API
+    schemes:
+      - id: unisphere_basic
+        type: http
+        scheme: basic
+        in: header
+        header: Authorization
+        applies_to: Every Unisphere for PowerMax REST call
+        description: >-
+          PyU4V uses requests.auth.HTTPBasicAuth against the Unisphere server for the
+          standard flow.
+      - id: unisphere_bearer
+        type: http
+        scheme: bearer
+        in: header
+        header: Authorization
+        applies_to: Token-based sessions
+        description: >-
+          When a token is supplied, PyU4V applies `Authorization: Bearer <token>` to the
+          base headers so it persists across the session. Both models are supported by the
+          same client.
+    session:
+      style: persistent REST session established per connection
+      api_version: >-
+        Unisphere API version 104 (Unisphere 10.4.0), pinned in the client and overridable
+        per connection via `u4v_version`.
+    transport:
+      tls: required
+      port: 8443
+      base_paths:
+        - /univmax/restapi
+        - /univmax/rest
+gaps:
+  - >-
+    No published OpenAPI declares these schemes. The profile is reconstructed from EMC's
+    shipped client code; an agent cannot discover it from a machine-readable contract.
+  - >-
+    No token lifetime, refresh endpoint or rotation policy is published for the ECS
+    X-SDS-AUTH-TOKEN. Clients discover expiry only by receiving a 401.
+  - >-
+    No MFA, mTLS or certificate-bound token option is documented for either API.

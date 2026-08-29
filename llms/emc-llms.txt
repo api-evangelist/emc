@@ -1,0 +1,95 @@
+# EMC (Dell EMC)
+
+> EMC Corporation, acquired by Dell Technologies in 2016 and now operating as Dell EMC,
+> builds enterprise storage, data management and data protection platforms. Two management
+> APIs are profiled here: the ECS Management REST API for ECS/ObjectScale object storage,
+> and the Unisphere REST API for the Unity and PowerMax array families. Both are appliance
+> APIs — they are served by hardware the customer owns, not by an EMC-operated endpoint.
+
+## What an agent needs to know first
+
+- There is no public base URL. Both APIs run on the customer's own array, so every base is
+  templated: `https://{ecs_management_host}:4443` for ECS, `https://{unisphere_host}:8443/univmax/restapi`
+  for Unisphere for PowerMax.
+- There is no signup, no API key, no plan and no rate limit. Access requires credentials on
+  an array you already operate.
+- No OpenAPI is publicly downloadable. Dell publishes API references on developer.dell.com,
+  but the portal is a client-rendered SPA whose specification API returns HTTP 401 to
+  anonymous callers.
+- The best machine-readable descriptions of these APIs are EMC's own client libraries,
+  which are public on GitHub. This file's derived artifacts were built from them.
+
+## APIs
+
+- [EMC ECS Management REST API](https://developer.dell.com/): Namespaces, tenants, buckets,
+  object users, secret keys, storage pools, replication groups, virtual data centers,
+  metering, alerts and configuration for ECS/ObjectScale object storage. Auth: HTTP Basic
+  login exchanged for an `X-SDS-AUTH-TOKEN` session header.
+- [EMC Unisphere REST API](https://developer.dell.com/): Storage provisioning, performance
+  monitoring, alert management and system configuration for Unity and PowerMax arrays.
+  Auth: HTTP Basic or `Authorization: Bearer`. API version 104 (Unisphere 10.4.0).
+
+## Data-plane protocols (ECS)
+
+ECS is a multi-protocol object store. An application that already speaks any of these
+integrates by changing an endpoint, not by writing a connector:
+
+- Amazon S3 REST API
+- OpenStack Swift Object API
+- EMC Atmos Object API
+- EMC CAS (Centera lineage), for write-once compliance archiving
+- Hadoop HDFS
+- NFSv3
+
+## First-party SDKs
+
+- [PyU4V](https://pypi.org/project/PyU4V/) (Python, Unisphere for PowerMax, 10.4.0.0)
+- [storops](https://pypi.org/project/storops/) (Python, Unity and VNX, 1.2.12)
+- [python-ecsclient](https://github.com/EMCECS/python-ecsclient) (Python, ECS Management API, 1.1.12 — last released 2022)
+- [gounity](https://pkg.go.dev/github.com/dell/gounity), [gopowermax](https://pkg.go.dev/github.com/dell/gopowermax/v2), [goisilon](https://pkg.go.dev/github.com/dell/goisilon), [goscaleio](https://pkg.go.dev/github.com/dell/goscaleio) (Go)
+- [com.emc.ecs:object-client](https://search.maven.org/artifact/com.emc.ecs/object-client) (Java, ECS object protocols)
+- [ECSManagementSDK](https://www.nuget.org/packages/ECSManagementSDK) (.NET, ECS Management API)
+- Terraform providers: [dell/objectscale](https://registry.terraform.io/providers/dell/objectscale/latest), [dell/powermax](https://registry.terraform.io/providers/dell/powermax/latest), [dell/powerscale](https://registry.terraform.io/providers/dell/powerscale/latest), [dell/powerstore](https://registry.terraform.io/providers/dell/powerstore/latest)
+
+## Try it without an array
+
+- [ECS Community Edition](https://github.com/EMCECS/ECS-CommunityEdition): EMC's free,
+  self-deployable build of the ECS platform, management API included. Release tags name the
+  exact ECS or ObjectScale build they install.
+
+## Errors
+
+ECS returns a vendor JSON envelope, not RFC 9457 problem+json:
+`{ "code": <int>, "retryable": <bool>, "description": <string>, "details": <string> }`.
+176 numeric codes are published inside EMC's own Python client. `retryable` is the only
+machine-readable retry hint and it is per-response, not per-code.
+
+## Reversibility — read before writing
+
+Most destructive ECS operations are expressed as a `deactivate` sub-resource rather than an
+HTTP DELETE, which is a soft delete. EMC does not publish the recovery window or the
+reactivation operation for any of them. Two operations are genuinely one-way:
+`DELETE vdc/data-services/varrays/{id}` (storage pool) and `PUT object/bucket/{id}/retention`
+(within the retention period). No idempotency key exists on any write.
+
+## Security
+
+- [Dell Security and Trust Center](https://www.dell.com/en-us/dt/about-us/security-and-trust-center/index.htm):
+  ISO 27001, SOC 1 Type 2, SOC 2 Type 2, PCI DSS Level 2, Common Criteria EAL2+, O-TTPS,
+  TISAX, IRAP and others. Reports are obtained through a Dell representative, not downloaded.
+- [Dell Vulnerability Response Policy](https://www.dell.com/support/dell-vulnerability-response-policy)
+- Bug bounty: [Dell Products](https://bugcrowd.com/dell-product) and [Dell Applications](https://bugcrowd.com/dell-com) on Bugcrowd.
+- `https://www.dell.com/.well-known/security.txt` is served (HTTP 200) but its Expires field
+  reads 2026-04-17 and it is therefore stale.
+
+## Repositories
+
+- [github.com/EMCECS](https://github.com/EMCECS) — the original EMC Elastic Cloud Storage organization
+- [github.com/dell](https://github.com/dell) — current Dell EMC engineering organization
+- [github.com/emccorp](https://github.com/emccorp) — legacy EMC container-storage drivers
+
+## Not published
+
+No MCP server, no A2A agent card, no AsyncAPI or webhook surface, no OAuth or OpenID Connect,
+no API status page, no deprecation policy or Sunset headers, no API changelog, no rate limits,
+no API plans or pricing, no public Postman workspace that could be verified.

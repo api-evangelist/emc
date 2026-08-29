@@ -1,0 +1,119 @@
+generated: '2026-08-29'
+method: searched
+source: >-
+  GitHub Releases on github.com/EMCECS/ECS-CommunityEdition (read via the GitHub API on
+  2026-08-29), github.com/dell/PyU4V version.py, and the Dell Technologies Security and
+  Trust Center. No developer-facing API changelog or deprecation policy is published for
+  either EMC management API.
+provider: EMC
+providerId: emc
+description: >-
+  Lifecycle posture for the EMC management APIs. These are appliance APIs: the version a
+  customer runs is the version of the array in their own data centre, so lifecycle here is
+  a product-release story rather than a hosted-API deprecation story. That distinction is
+  the reason several of the fields below are honestly empty rather than filled in.
+versioning:
+  ecs:
+    scheme: platform release (major.minor.patch.build)
+    current_platform_release: ECS 3.8.1.4
+    successor_platform: ObjectScale 4.0.0.0
+    api_versions_supported: [v2, v3, v4]
+    in_url: false
+    note: >-
+      The ECS Management API version is not carried in the URL path. EMC's own client
+      selects v2/v3/v4 at construction and swaps the module tree behind identical wire
+      paths, so an agent cannot determine from a request which API contract an array will
+      apply.
+  unisphere:
+    scheme: numeric API version
+    current: '104'
+    release: Unisphere 10.4.0
+    in_url: false
+    note: >-
+      Unisphere pins an explicit numeric API version, overridable per connection. This is
+      the stronger of the two versioning models and the one an integrator can actually
+      target.
+deprecation_policy:
+  published: false
+  sunset_header: not implemented
+  deprecation_header: not implemented
+  rfc8594: false
+  note: >-
+    No RFC 8594 Sunset or Deprecation header is emitted, and no API deprecation policy is
+    published on any reachable Dell or EMC surface. Product end-of-life is announced
+    through Dell's product support lifecycle pages per array model, not per API version.
+    No Deprecation pointer is emitted in apis.yml, because there is no policy to point at.
+status_page:
+  published: false
+  probed:
+    - url: https://status.dell.com/
+      status: '000 — host does not resolve'
+  note: >-
+    There is no EMC or Dell API status page, and structurally there could not usefully be
+    one: ECS and Unisphere run on customer-owned hardware in customer data centres, so
+    availability is the customer's own, not a shared service EMC could report on. No
+    StatusPage pointer is emitted.
+sla:
+  published: false
+  note: >-
+    Support entitlements are contracted per array through Dell ProSupport rather than
+    published as an API SLA.
+platform_release_history:
+  source: https://github.com/EMCECS/ECS-CommunityEdition/releases
+  note: >-
+    EMC's ECS Community Edition repository tags each release against the ECS (or
+    ObjectScale) platform build it installs, which makes it the only publicly dated
+    release trail for the platform behind the ECS Management API.
+  releases:
+    - tag: v2.9.1-3.8.1.4
+      date: '2025-05-20'
+      platform: ECS 3.8.1.4
+    - tag: v2.9.1-4.0.0.0
+      date: '2025-03-13'
+      platform: ObjectScale 4.0.0.0
+      note: First ObjectScale-branded build — the successor platform to ECS.
+    - tag: v2.9.1-3.8.1.3
+      date: '2025-01-09'
+      platform: ECS 3.8.1.3
+    - tag: v2.9.1-3.8.1.2
+      date: '2025-01-09'
+      platform: ECS 3.8.1.2
+    - tag: v2.9.1-3.8.0.3
+      date: '2023-11-06'
+      platform: ECS 3.8.0.3
+    - tag: v2.9.1-3.8.0.1
+      date: '2022-12-15'
+      platform: ECS 3.8.0.1
+    - tag: 2.9.1-3.7.0.0
+      date: '2022-03-02'
+      platform: ECS 3.7.0.0
+    - tag: 2.9.1-1
+      date: '2021-08-05'
+      platform: ECS 3.6.2.0
+    - tag: 2.9.1-r-2
+      date: '2021-07-28'
+      platform: ECS 3.6.1.2
+    - tag: v2.9.1-3.6.0.1
+      date: '2021-06-15'
+      platform: ECS 3.6.0.1
+    - tag: 2.9.1-3.5.0.0
+      date: '2021-06-15'
+      platform: ECS 3.5.0.0
+    - tag: 2.9.1-3.4.0.0
+      date: '2019-11-05'
+      platform: ECS 3.4.0.0
+brand_lifecycle:
+  finding: >-
+    The EMC brand itself is mid-transition. EMC was acquired by Dell Technologies in 2016;
+    the storage line is now marketed as Dell PowerStore/PowerScale/PowerMax/PowerFlex, and
+    ECS — the platform behind the ECS Management REST API — has a named successor in
+    ObjectScale, whose 4.0.0.0 build shipped in March 2025 and which has its own Terraform
+    provider (dell/objectscale 1.1.0, published 2026-06-24). An integrator choosing a
+    target today should know the ECS Management API is on the trailing side of that
+    transition.
+gaps:
+  - No API-level deprecation policy, Sunset header, or breaking-change notice channel.
+  - No status page (and none would be meaningful for a customer-hosted appliance).
+  - >-
+    Product end-of-life dates are published per array on Dell's support site, which
+    returns 403 to non-browser clients, so they were not machine-readable from this run.

@@ -107,6 +107,11 @@ apis:
     Base path and port read from EMC's own first-party client github.com/dell/PyU4V, which builds https://{server_ip}:{port}/univmax/restapi
     (enhanced API at /univmax/rest). Replaces the non-routable placeholder https://unity.example.com/api.
 common:
+- type: ParentCompany
+  url: https://apis.io/providers/dell-technologies/
+  name: Dell Technologies
+  x-relationship: acquired
+  x-evidence: "EMC Corporation, acquired by Dell Technologies in 2016 and now operating as Dell EMC, builds enterprise storage, data management and data protection platforms — ECS/ObjectScale object storage, Unity, VNX, PowerMax (VMAX lineage), PowerScale"
 - type: VulnerabilityDisclosure
   url: security/emc-vulnerability-disclosure.yml
 - type: DomainSecurity

@@ -33,6 +33,7 @@ accessModel:
   confidence: medium
   source:
   - plans
+  - {url: 'https://www.delltechnologies.com/en-us/index.htm', status: 301, note: 'declared website redirects to https://www.dell.com/en-us — a different registrable domain (delltechnologies.com -> dell.com), possible rename or acquisition (probed 2026-09-03, roadmap#169)'}
   generated: '2026-07-22'
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/emc.png
@@ -71,8 +72,9 @@ apis:
     url: errors/emc-error-codes.yml
   - type: DataModel
     url: data-model/emc-data-model.yml
-  - type: MCPServer
+  - type: X-MCPServerCandidate
     url: mcp/emc-mcp.yml
+    note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
   contact:
   - type: Support
     url: https://www.dell.com/support/home/en-us
@@ -182,8 +184,9 @@ common:
   url: lifecycle/emc-lifecycle.yml
 - type: ChangeLog
   url: changelog/emc-changelog.yml
-- type: MCPServer
+- type: X-MCPServerCandidate
   url: mcp/emc-mcp.yml
+  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
 - type: Sandbox
   url: sandbox/emc-sandbox.yml
 - type: LLMsTxt

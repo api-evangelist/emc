@@ -241,3 +241,5 @@ x-enrichment:
   status: enriched
   artifacts_added: 14
   pass: local-v1
+x-status: acquired
+x-acquired-by: dell-technologies

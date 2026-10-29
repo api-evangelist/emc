@@ -1,4 +1,4 @@
-# EMC (emc)
+# EMC
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,70 +64,90 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-EMC Corporation (now Dell EMC, a division of Dell Technologies) provides enterprise storage, data management, and cloud infrastructure solutions. EMC products include VMAX, VNX, Isilon, and ECS storage platforms, as well as data protection and information management solutions. EMC was acquired by Dell Technologies in 2016.
+> **Acquired or rebranded.** This company was acquired, merged or renamed. Its API, if it still exists, is offered under another name. This profile is kept as a historical record and is not maintained or rated.
 
-**URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/emc/refs/heads/main/apis.yml)
+EMC Corporation, acquired by Dell Technologies in 2016 and now operating as Dell EMC, builds enterprise storage, data management and data protection platforms — ECS/ObjectScale object storage, Unity, VNX, PowerMax (VMAX lineage), PowerScale (Isilon) and PowerFlex (ScaleIO). Two management APIs are profiled: the ECS Management REST API and the Unisphere REST API. Both are appliance APIs served on port 4443 and 8443 by hardware the customer owns, so there is no EMC-operated endpoint, no API key, no plan and no rate limit — a fact that shapes every artifact in this repo. ECS is multi-protocol, implementing the Amazon S3, OpenStack Swift, EMC Atmos, EMC CAS, HDFS and NFSv3 interfaces, which means an S3-speaking application integrates by changing an endpoint rather than writing a connector. No OpenAPI is publicly downloadable: Dell publishes references on developer.dell.com, but the portal is a client-rendered SPA whose specification API returns HTTP 401 to anonymous callers, so this profile is built from EMC's own published client libraries on github.com/EMCECS and github.com/dell.
 
-## Scope
+**Areas:** Cloud Infrastructure · Data Management · Data Protection · Enterprise Storage · Object Storage · Storage · S3 Compatible · Fortune 500
 
-- **Type:** Index
-- **Position:** Consumer
-- **Access:** 3rd-Party
+## EMC on APIs.io (historical record)
 
-## Tags:
+Everything profiled for EMC is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/emc/](https://apis.io/providers/emc/)** — or go straight to one of the APIs or properties below.
 
- - Cloud Infrastructure, Data Management, Data Protection, Enterprise Storage, Storage
+### APIs (2)
 
-## Timestamps
+- [EMC ECS Management REST API](https://apis.io/apis/emc/ecs-management-api/) — The ECS Management REST API provides programmatic access to manage Dell EMC Elastic Cloud Storage (ECS) object storage platform. It supports namespace…
+- [EMC Unisphere REST API](https://apis.io/apis/emc/unisphere-api/) — The Unisphere Management REST API provides programmatic access to manage Dell EMC Unity and PowerStore storage arrays. It supports storage resource…
 
-- **Created:** 2026-03-24
-- **Modified:** 2026-04-18
+### Published properties
 
-## APIs
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-### EMC ECS Management REST API
-The ECS Management REST API provides programmatic access to manage Dell EMC Elastic Cloud Storage (ECS) object storage platform. It supports namespace management, user management, storage pool configuration, replication groups, bucket management, and monitoring operations.
+#### MCP servers (1)
 
-**Human URL:** [https://www.dell.com/support/kbdoc/en-us/000020064/ecs-api-documentation](https://www.dell.com/support/kbdoc/en-us/000020064/ecs-api-documentation)
+Model Context Protocol servers that expose the API to agents.
 
-**Base URL:** https://ecs.example.com:4443
+- [emc-mcp.yml](https://apis.io/servers/emc/emc-mcp-yml/)
 
-#### Tags:
+#### Vocabulary (1)
 
- - Buckets, Cloud Storage, Namespaces, Object Storage
+The provider's domain terms, defined.
 
-#### Properties
+- [EMC API Vocabulary](https://apis.io/vocabularies/emc/emc-vocabulary/)
 
-- [Documentation](https://www.dell.com/support/kbdoc/en-us/000020064/ecs-api-documentation)
+#### Security (4)
 
-### EMC Unisphere REST API
-The Unisphere Management REST API provides programmatic access to manage Dell EMC Unity and PowerStore storage arrays. It supports storage resource provisioning, performance monitoring, alert management, and system configuration operations.
+Authentication, trust centre, and vulnerability disclosure.
 
-**Human URL:** [https://www.dell.com/support/kbdoc/en-us/000020064/ecs-api-documentation](https://www.dell.com/support/kbdoc/en-us/000020064/ecs-api-documentation)
+- [Emc Authentication](https://apis.io/security/emc/emc-authentication/)
+- [Emc Domain Security](https://apis.io/security/emc/emc-domain-security/)
+- [Emc Trust Center](https://apis.io/security/emc/emc-trust-center/)
+- [Emc Vulnerability Disclosure](https://apis.io/security/emc/emc-vulnerability-disclosure/)
 
-**Base URL:** https://unity.example.com/api
+#### Plans and pricing (1)
 
-#### Tags:
+Published plans, tiers and prices.
 
- - Enterprise Storage, Management, Monitoring, Storage Arrays
+- [Emc Plans Pricing](https://apis.io/plans/emc/emc-plans-pricing/)
 
-#### Properties
+#### Rate limits (1)
 
-- [Documentation](https://www.dell.com/support/kbdoc/en-us/000020064/ecs-api-documentation)
+Published request limits.
 
-## Common Properties
+- [Emc Rate Limits](https://apis.io/rate-limits/emc/emc-rate-limits/)
 
-- [Documentation](https://www.dell.com/support/kbdoc/en-us/000020064/ecs-api-documentation)
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Emc Finops](https://apis.io/finops/emc/emc-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.delltechnologies.com/en-us/index.htm)
+- [Documentation](https://developer.dell.com/apis)
+- [API reference](https://developer.dell.com/apis)
+- [Sign up](https://www.dell.com/en-us/lp/sign-in)
 - [Support](https://www.dell.com/support/home/en-us)
-- [Developer Portal](https://developer.dell.com/)
+- [Blog](https://www.dell.com/en-us/blog/)
+- [Terms of service](https://www.dell.com/en-us/lp/terms-of-sale)
+- [Privacy policy](https://www.dell.com/en-us/lp/legal/privacy-statement)
+- [GitHub](https://github.com/emccorp)
 
-## Artifacts
+## API Evangelist rating
 
-- [Capabilities](capabilities/emc-capabilities.yml)
-- [Vocabulary](vocabulary/emc-vocabulary.yml)
+**Not rated** — this company is recorded as acquired or rebranded, so no score is published. If it is in fact operating, say so on this repository and it will be re-profiled.
 
-## Maintainers
+## How this profile is made
 
-**FN:** Kin Lane
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
 
-**Email:** kin@apievangelist.com
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for EMC: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/emc/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
